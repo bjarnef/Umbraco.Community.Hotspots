@@ -1,0 +1,14 @@
+{
+    "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json", 
+    "AuthorDetails": {
+      "Name": "Bjarne Fyrstenborg",
+      "ImageUrl": "https://github.com/bjarnef.png"
+    },
+    "Category": "",
+    "Description": "",
+    "LicenseTypes": [ "Free" ],
+    "IssueTrackerUrl": "https://github.com/bjarnef/Umbraco.Community.Hotspots/issues",
+    "PackageType": "Package",
+    "Tags": [],
+    "Title": "Umbraco Community Hotspots"
+  }
