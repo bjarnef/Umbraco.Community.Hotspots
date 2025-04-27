@@ -60,7 +60,7 @@ function HotspotController($scope, entityResource) {
   * @param {any} top
   */
   function focalPointChanged(left, top) {
-    //console.log("focalPointChanged", left, top);
+    console.log("focalPointChanged", left, top);
 
     if (left === null && top === null) {
       $scope.model.value.focalPoint = null;

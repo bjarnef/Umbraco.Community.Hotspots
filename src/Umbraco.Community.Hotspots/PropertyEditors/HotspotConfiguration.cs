@@ -1,5 +1,6 @@
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
 
 namespace Umbraco.Community.Hotspots.PropertyEditors;
 

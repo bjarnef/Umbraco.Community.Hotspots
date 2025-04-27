@@ -16,7 +16,7 @@ namespace Umbraco.Community.Hotspots.PropertyEditors;
 [DataEditor(
     PropertyEditorAlias,
     "Hotspot",
-    "hotspot",
+    "/App_Plugins/Umbraco.Community.Hotspots/hotspot.html",
     ValueType = ValueTypes.Json,
     HideLabel = false,
     Group = Constants.PropertyEditors.Groups.Media,
@@ -25,7 +25,7 @@ namespace Umbraco.Community.Hotspots.PropertyEditors;
 public class HotspotPropertyEditor : DataEditor
 {
 
-    public const string PropertyEditorAlias = "Our.Umbraco.Photon";
+    public const string PropertyEditorAlias = "Umbraco.Community.Hotspot";
 
     private readonly UploadAutoFillProperties _autoFillProperties;
     private readonly IContentService _contentService;
