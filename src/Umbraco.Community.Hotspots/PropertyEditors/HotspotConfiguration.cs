@@ -11,4 +11,7 @@ public class HotspotConfiguration
 {
     [ConfigurationField("mediaId", "Image", "mediapicker", Description = "Choose the image to select hotspots.")]
     public GuidUdi? MediaId { get; set; }
+
+    [ConfigurationField("url", "Image", "/App_Plugins/Umbraco.Community.Hotspots/static-image.html", Description = "Choose the image to select hotspots.")]
+    public string? Url { get; set; }
 }

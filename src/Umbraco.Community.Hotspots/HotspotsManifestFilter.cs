@@ -17,7 +17,8 @@ namespace Umbraco.Community.Hotspots
                 [
                     // List any Script files
                     // Urls should start '/App_Plugins/Umbraco.Community.Hotspots/' not '/wwwroot/Umbraco.Community.Hotspots/', e.g.
-                    "/App_Plugins/Umbraco.Community.Hotspots/hotspot.controller.js"
+                    "/App_Plugins/Umbraco.Community.Hotspots/hotspot.controller.js",
+                    "/App_Plugins/Umbraco.Community.Hotspots/static-image.controller.js"
                 ],
                 Stylesheets =
                 [
