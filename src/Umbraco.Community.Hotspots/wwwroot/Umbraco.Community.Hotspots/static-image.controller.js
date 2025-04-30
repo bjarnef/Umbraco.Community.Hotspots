@@ -10,8 +10,9 @@ function StaticImageController($scope, entityResource, editorService, localizati
   vm.editMedia = editMedia;
 
   //setup the default config
-  var config = {
-    mediaKey: null
+  const config = {
+    mediaKey: null,
+    type: "media"
   };
 
   // map the user config
@@ -75,7 +76,8 @@ function StaticImageController($scope, entityResource, editorService, localizati
           mediaEntry.mediaKey = entry.key;
           //updateMediaEntryData(mediaEntry);
           //$scope.model.value.splice(createIndex + indexIncrementor, 0, mediaEntry);
-          $scope.model.value.src = mediaEntry.mediaKey;
+          $scope.model.value.mediaKey = mediaEntry.mediaKey;
+          $scope.model.value.src = null;
           indexIncrementor++;
         });
 
@@ -145,7 +147,9 @@ function StaticImageController($scope, entityResource, editorService, localizati
     editorService.open(mediaEditorModel);
   }
 
-  function clear() {
+  function clear($event) {
+    $event.stopPropagation();
+    $scope.model.value.src = null;
     vm.image = null;
   }
 
@@ -173,7 +177,9 @@ function StaticImageController($scope, entityResource, editorService, localizati
             name: file.name,
           };
 
+          $scope.model.value.mediaKey = null;
           $scope.model.value.src = url;
+
           editorService.close();
         },
         close: () => editorService.close()

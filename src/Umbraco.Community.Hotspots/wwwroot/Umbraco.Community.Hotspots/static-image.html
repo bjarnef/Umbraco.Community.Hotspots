@@ -1,28 +1,39 @@
 <div class="umb-property-editor umb-property-editor--limit-width" ng-controller="Umbraco.Community.Hotspots.PrevalueEditors.StaticImageController as vm">
 
   <div>
-    <select ng-model="model.value.type" class="umb-property-editor" ng-change="vm.clear()">
-      <option value="media">Media</option>
-      <option value="file">File</option>
-    </select>
+    <div class="flex" style="gap: 1rem;">
+      <umb-radiobutton
+          name="type"
+          value="media"
+          model="model.value.type"
+          text="Media">
+      </umb-radiobutton>
+      <umb-radiobutton
+          name="type"
+          value="staticAsset"
+          model="model.value.type"
+          text="Static Asset">
+      </umb-radiobutton>
+    </div>
 
-    <div ng-if="model.value.type === 'media'">
+    <div ng-if="model.value.type === 'media'" class="umb-media-card-grid">
       <umb-media-card
-        ng-if="media.mediaKey"
-        media-key="media.mediaKey"
+        ng-if="model.value.mediaKey"
+        media-key="model.value.mediaKey"
         on-name-clicked="vm.editMedia(media, $index, $event)">
         <div class="__actions">
           <!--<button ng-if="vm.supportCopy" type="button" class="btn-reset __action umb-outline" localize="title" title="actions_copy" ng-click="vm.copyMedia(media); $event.stopPropagation();">
             <umb-icon icon="icon-documents" class="icon"></umb-icon>
-          </button>
-          <button ng-if="vm.allowRemoveMedia" type="button" class="btn-reset __action umb-outline" localize="title" title="general_remove" ng-click="vm.removeMedia(media); $event.stopPropagation();">
-            <umb-icon icon="icon-trash" class="icon"></umb-icon>
           </button>-->
+          <button type="button" class="btn-reset __action umb-outline" localize="title" title="general_remove" ng-click="vm.removeMedia(media); $event.stopPropagation();">
+            <umb-icon icon="icon-trash" class="icon"></umb-icon>
+          </button>
         </div>
       </umb-media-card>
       <button
         type="button"
         class="btn-reset umb-media-card-grid__create-button umb-outline"
+        ng-if="!model.value.mediaKey"
         ng-click="vm.addMedia(model.value.length, $event)">
         <div>
             <umb-icon icon="icon-add" class="icon large"></umb-icon>
@@ -30,24 +41,23 @@
         </div>
       </button>
     </div>
-    <div v-else>
+    <div ng-if="model.value.type === 'staticAsset'">
 
       <div class="umb-media-card" ng-if="model.value !== null && model.value.src !== null">
         <div class="__showcase">
-          <umb-media-preview ng-if="vm.image"
-                             source="vm.image.source"
-                             extension="vm.image.extension"
-                             name="vm.image.name"
-                             style="pointer-events: none;">
+          <umb-media-preview
+            ng-if="vm.image"
+            source="vm.image.source"
+            extension="vm.image.extension"
+            name="vm.image.name">
           </umb-media-preview>
         </div>
-        <div class="__actions">
+        <div class="__actions" ng-if="model.value.src !== null">
           <button type="button"
                   class="btn-reset __action umb-outline"
                   localize="title"
                   title="general_remove"
-                  ng-click="vm.clear(); $event.stopPropagation();"
-                  ng-disabled="media.$uploadProgress < 100">
+                  ng-click="vm.clear($event)">
             <umb-icon icon="icon-trash" class="icon"></umb-icon>
           </button>
         </div>
