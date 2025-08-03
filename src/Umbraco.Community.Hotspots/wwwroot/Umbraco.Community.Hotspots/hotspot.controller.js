@@ -7,8 +7,8 @@ function HotspotController($scope, entityResource) {
   vm.imageLoaded = imageLoaded;
 
   //setup the default config
-  var config = {
-    mediaId: null
+  const config = {
+    mediaKey: null
   };
 
   // map the user config
@@ -26,14 +26,13 @@ function HotspotController($scope, entityResource) {
 
   function retrieveMedia() {
 
-    const id = $scope.model.config.mediaId || null;
+    const id = $scope.model.config.mediaKey || null;
 
     if (id == null) {
       return;
     }
 
     entityResource.getById(id, "Media").then(media => {
-      //console.log("media", media);
       $scope.media = media;
       $scope.imageSrc = media.metaData.MediaPath;
     });

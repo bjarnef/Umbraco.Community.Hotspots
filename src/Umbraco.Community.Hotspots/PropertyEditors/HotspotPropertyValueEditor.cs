@@ -108,9 +108,10 @@ internal class HotspotPropertyValueEditor : DataValueEditor
 
         HotspotConfiguration? configuration = _dataTypeService.GetDataType(propertyType.DataTypeId)
             ?.ConfigurationAs<HotspotConfiguration>();
+        HotspotConfiguration.SourceImage? source = configuration?.Source;
 
         return JsonConvert.SerializeObject(
-            new { src = val },
+            new { src = val, source },
             new JsonSerializerSettings { Formatting = Formatting.None, NullValueHandling = NullValueHandling.Ignore });
     }
 }

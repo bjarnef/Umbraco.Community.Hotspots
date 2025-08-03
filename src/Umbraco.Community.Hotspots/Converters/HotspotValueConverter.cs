@@ -56,7 +56,6 @@ public class HotspotValueConverter : PropertyValueConverterBase, IDeliveryApiPro
         }
         catch (Exception ex)
         {
-            // cannot deserialize, assume it may be a raw image URL
             _logger.LogError(ex, "Could not deserialize string '{JsonString}' into an hotspot value.", sourceString);
             value = new HotspotValue { Src = sourceString };
         }

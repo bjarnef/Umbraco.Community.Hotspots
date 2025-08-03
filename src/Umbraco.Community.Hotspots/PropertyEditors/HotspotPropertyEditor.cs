@@ -27,7 +27,6 @@ public class HotspotPropertyEditor : DataEditor
 
     public const string PropertyEditorAlias = "Umbraco.Community.Hotspot";
 
-    private readonly UploadAutoFillProperties _autoFillProperties;
     private readonly IContentService _contentService;
     private readonly IDataTypeService _dataTypeService;
     private readonly IEditorConfigurationParser _editorConfigurationParser;
@@ -46,7 +45,6 @@ public class HotspotPropertyEditor : DataEditor
         IOptionsMonitor<ContentSettings> contentSettings,
         IDataTypeService dataTypeService,
         IIOHelper ioHelper,
-        UploadAutoFillProperties uploadAutoFillProperties,
         IContentService contentService,
         IEditorConfigurationParser editorConfigurationParser)
         : base(dataValueEditorFactory)
@@ -55,8 +53,6 @@ public class HotspotPropertyEditor : DataEditor
         _contentSettings = contentSettings.CurrentValue ?? throw new ArgumentNullException(nameof(contentSettings));
         _dataTypeService = dataTypeService ?? throw new ArgumentNullException(nameof(dataTypeService));
         _ioHelper = ioHelper ?? throw new ArgumentNullException(nameof(ioHelper));
-        _autoFillProperties =
-            uploadAutoFillProperties ?? throw new ArgumentNullException(nameof(uploadAutoFillProperties));
         _contentService = contentService;
         _editorConfigurationParser = editorConfigurationParser;
         _logger = loggerFactory.CreateLogger<HotspotPropertyEditor>();

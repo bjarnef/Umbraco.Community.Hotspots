@@ -1,4 +1,4 @@
-<div class="umb-property-editor umb-property-editor--limit-width" ng-controller="Umbraco.Community.Hotspots.PrevalueEditors.StaticImageController as vm">
+<div class="umb-property-editor umb-property-editor--limit-width" ng-controller="Umbraco.Community.Hotspots.PrevalueEditors.SourceImageController as vm">
 
   <div>
     <div class="flex" style="gap: 1rem;">
@@ -22,10 +22,7 @@
         media-key="model.value.mediaKey"
         on-name-clicked="vm.editMedia(media, $index, $event)">
         <div class="__actions">
-          <!--<button ng-if="vm.supportCopy" type="button" class="btn-reset __action umb-outline" localize="title" title="actions_copy" ng-click="vm.copyMedia(media); $event.stopPropagation();">
-            <umb-icon icon="icon-documents" class="icon"></umb-icon>
-          </button>-->
-          <button type="button" class="btn-reset __action umb-outline" localize="title" title="general_remove" ng-click="vm.removeMedia(media); $event.stopPropagation();">
+          <button type="button" class="btn-reset __action umb-outline" localize="title" title="general_remove" ng-click="vm.removeMedia(media, $event)">
             <umb-icon icon="icon-trash" class="icon"></umb-icon>
           </button>
         </div>

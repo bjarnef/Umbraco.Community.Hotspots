@@ -1,4 +1,4 @@
-function StaticImageController($scope, entityResource, editorService, localizationService) {
+function SourceImageController($scope, entityResource, editorService, localizationService) {
 
   const vm = this;
 
@@ -8,6 +8,7 @@ function StaticImageController($scope, entityResource, editorService, localizati
 
   vm.addMedia = addMedia;
   vm.editMedia = editMedia;
+  vm.removeMedia = removeMedia;
 
   //setup the default config
   const config = {
@@ -37,7 +38,6 @@ function StaticImageController($scope, entityResource, editorService, localizati
     }
 
     entityResource.getById(id, "Media").then(media => {
-      //console.log("media", media);
       $scope.media = media;
       $scope.imageSrc = media.metaData.MediaPath;
     });
@@ -105,7 +105,6 @@ function StaticImageController($scope, entityResource, editorService, localizati
   }
 
   function editMedia(mediaEntry, options, $event) {
-    if (!vm.allowEditMedia) return;
 
     if ($event)
       $event.stopPropagation();
@@ -124,27 +123,32 @@ function StaticImageController($scope, entityResource, editorService, localizati
       documentName: documentInfo.name,
       mediaEntry: mediaEntryClone,
       propertyEditor: {
-        changeMediaFor: changeMediaFor,
-        resetCrop: resetCrop
+        //changeMediaFor: changeMediaFor,
+        //resetCrop: resetCrop
       },
       //enableFocalPointSetter: vm.model.config.enableLocalFocalPoint || false,
       view: "views/common/infiniteeditors/mediaentryeditor/mediaentryeditor.html",
       size: "large",
-      submit: function (model) {
+      submit: (model) => {
         vm.model.value[vm.model.value.indexOf(mediaEntry)] = mediaEntryClone;
         editorService.close();
       },
-      close: function (model) {
-        if (model.createFlow === true) {
-          // This means that the user cancelled the creation and we should remove the media item.
-          // TODO: remove new media item.
-        }
+      close: () => {
         editorService.close();
       }
     };
 
-    // open property settings editor
     editorService.open(mediaEditorModel);
+  }
+
+  function removeMedia(mediaEntry, $event) {
+
+    if ($event)
+      $event.stopPropagation();
+
+    $scope.model.value.mediaKey = null;
+
+    setDirty();
   }
 
   function clear($event) {
@@ -210,4 +214,4 @@ function StaticImageController($scope, entityResource, editorService, localizati
 
 }
 
-angular.module("umbraco").controller("Umbraco.Community.Hotspots.PrevalueEditors.StaticImageController", StaticImageController);
+angular.module("umbraco").controller("Umbraco.Community.Hotspots.PrevalueEditors.SourceImageController", SourceImageController);
