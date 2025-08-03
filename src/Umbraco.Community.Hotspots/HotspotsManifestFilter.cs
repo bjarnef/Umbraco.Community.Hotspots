@@ -24,7 +24,7 @@ namespace Umbraco.Community.Hotspots
                 [
                     // List any Stylesheet files
                     // Urls should start '/App_Plugins/Umbraco.Community.Hotspots/' not '/wwwroot/Umbraco.Community.Hotspots/', e.g.
-                    //"/App_Plugins/Umbraco.Community.Hotspots/Styles/styles.css"
+                    "/App_Plugins/Umbraco.Community.Hotspots/styles.css"
                 ]
             });
         }

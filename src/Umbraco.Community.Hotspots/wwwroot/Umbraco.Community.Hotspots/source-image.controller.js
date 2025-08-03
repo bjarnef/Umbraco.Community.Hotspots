@@ -24,7 +24,15 @@ function SourceImageController($scope, entityResource, editorService, localizati
 
   function init() {
 
-    setModelValueWithSrc($scope.model.value);
+    if ($scope.model.value && $scope.model.value.src) {
+      const src = $scope.model.value.src;
+      const ext = src.substring(src.lastIndexOf('.') + 1);
+      vm.image = {
+        source: src.substring(1),
+        extension: ext,
+        name: src.substring(src.lastIndexOf('/') + 1),
+      };
+    }
 
     retrieveMedia();
   }
@@ -122,11 +130,6 @@ function SourceImageController($scope, entityResource, editorService, localizati
       createFlow: options.createFlow === true,
       documentName: documentInfo.name,
       mediaEntry: mediaEntryClone,
-      propertyEditor: {
-        //changeMediaFor: changeMediaFor,
-        //resetCrop: resetCrop
-      },
-      //enableFocalPointSetter: vm.model.config.enableLocalFocalPoint || false,
       view: "views/common/infiniteeditors/mediaentryeditor/mediaentryeditor.html",
       size: "large",
       submit: (model) => {
@@ -191,17 +194,6 @@ function SourceImageController($scope, entityResource, editorService, localizati
 
       editorService.staticFilePicker(staticImagePicker);
     });
-  }
-
-  /**
-  * Used to assign a new model value
-  * @param {any} src
-  */
-  function setModelValueWithSrc(src) {
-    if (!$scope.model.value || !$scope.model.value.src) {
-      //we are copying to not overwrite the original config
-      $scope.model.value = Utilities.extend(Utilities.copy($scope.model.config), { src: src });
-    }
   }
 
   function setDirty() {

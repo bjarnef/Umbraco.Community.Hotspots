@@ -26,7 +26,13 @@ function HotspotController($scope, entityResource) {
 
   function retrieveMedia() {
 
-    const id = $scope.model.config.mediaKey || null;
+    if ($scope.model.config.source && $scope.model.config.source.type === 'staticAsset') {
+      $scope.imageSrc = $scope.model.config.source.src.replace(/^~/, "");;
+
+      return;
+    }
+
+    const id = $scope.model.config.source?.mediaKey || null;
 
     if (id == null) {
       return;

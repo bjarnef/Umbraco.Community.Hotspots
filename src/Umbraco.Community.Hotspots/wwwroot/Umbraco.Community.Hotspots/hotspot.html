@@ -1,6 +1,6 @@
 <div class="umb-property-editor umb-property-editor--limit-width" ng-controller="Umbraco.Community.Hotspots.PropertyEditors.HotspotController as vm">
 
-  <div class="umb-cropper-imageholder clearfix">
+  <div class="umb-cropper-imageholder clearfix" ng-class="{ 'hotspot-hidden': !model.value.focalPoint }">
     <umb-image-gravity
       src="imageSrc"
       center="model.value.focalPoint"
