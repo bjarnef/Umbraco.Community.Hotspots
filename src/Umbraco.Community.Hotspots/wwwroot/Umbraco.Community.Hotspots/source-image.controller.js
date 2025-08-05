@@ -58,6 +58,8 @@ function SourceImageController($scope, entityResource, editorService, localizati
       startNodeIsVirtual: vm.model.config.startNodeIsVirtual,
       dataTypeKey: vm.model.dataTypeKey,*/
       multiPicker: false,
+      onlyImages: true,
+      disableFolderSelect: true,
       /*clickPasteItem: function (item, mouseEvent) {
 
         if (Array.isArray(item.data)) {
