@@ -1,4 +1,6 @@
+using System.Globalization;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.PropertyEditors.DeliveryApi;
@@ -17,6 +19,12 @@ namespace Umbraco.Community.Hotspots.Converters;
 [DefaultPropertyValueConverter(typeof(JsonValueConverter))]
 public class HotspotValueConverter : PropertyValueConverterBase, IDeliveryApiPropertyValueConverter
 {
+    /*private static readonly JsonSerializerSettings _jsonSerializerSettings = new()
+    {
+        Culture = CultureInfo.InvariantCulture,
+        FloatParseHandling = FloatParseHandling.Decimal,
+    };*/
+
     private readonly IJsonSerializer _jsonSerializer;
 
     private readonly ILogger<HotspotValueConverter> _logger;
