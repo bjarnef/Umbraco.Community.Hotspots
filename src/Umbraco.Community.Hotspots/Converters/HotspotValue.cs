@@ -24,7 +24,7 @@ public class HotspotValue : IHtmlEncodedString, IEquatable<HotspotValue>
     ///     Gets or sets the value focal point.
     /// </summary>
     [DataMember(Name = "focalPoint")]
-    public ImageCropperFocalPoint? FocalPoint { get; set; }
+    public HotspotFocalPoint? FocalPoint { get; set; }
 
     /// <inheritdoc />
     public string? ToHtmlString() => Src;
@@ -45,6 +45,48 @@ public class HotspotValue : IHtmlEncodedString, IEquatable<HotspotValue>
     /// </summary>
     public bool HasImage()
         => !string.IsNullOrWhiteSpace(Src);
+
+    public class HotspotFocalPoint : IEquatable<HotspotFocalPoint>
+    {
+        [DataMember(Name = "left")] public decimal Left { get; set; }
+
+        [DataMember(Name = "top")] public decimal Top { get; set; }
+
+        #region IEquatable
+
+        /// <inheritdoc />
+        public bool Equals(HotspotFocalPoint? other)
+            => ReferenceEquals(this, other) || Equals(this, other);
+
+        /// <inheritdoc />
+        public override bool Equals(object? obj)
+            => ReferenceEquals(this, obj) || (obj is HotspotFocalPoint other && Equals(this, other));
+
+        private static bool Equals(HotspotFocalPoint left, HotspotFocalPoint? right)
+            => ReferenceEquals(left, right) // deals with both being null, too
+               || (!ReferenceEquals(left, null) && !ReferenceEquals(right, null)
+                                                && left.Left == right.Left
+                                                && left.Top == right.Top);
+
+        public static bool operator ==(HotspotFocalPoint left, HotspotFocalPoint right)
+            => Equals(left, right);
+
+        public static bool operator !=(HotspotFocalPoint left, HotspotFocalPoint right)
+            => !Equals(left, right);
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                // properties are, practically, readonly
+                // ReSharper disable NonReadonlyMemberInGetHashCode
+                return (Left.GetHashCode() * 397) ^ Top.GetHashCode();
+                // ReSharper restore NonReadonlyMemberInGetHashCode
+            }
+        }
+
+        #endregion
+    }
 
     #region IEquatable
 
