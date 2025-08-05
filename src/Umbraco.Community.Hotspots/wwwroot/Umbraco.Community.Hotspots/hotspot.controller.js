@@ -19,7 +19,7 @@ function HotspotController($scope, entityResource) {
 
   function init() {
 
-    setModelValueWithSrc($scope.model.value);
+    setModelValueWithSrc($scope.model.config?.source?.src);
 
     retrieveMedia();
   }
@@ -57,6 +57,8 @@ function HotspotController($scope, entityResource) {
       //we are copying to not overwrite the original config
       $scope.model.value = Utilities.extend(Utilities.copy($scope.model.config), { src: src });
     }
+
+    delete $scope.model.value.source;
   }
 
   /**
@@ -65,8 +67,6 @@ function HotspotController($scope, entityResource) {
   * @param {any} top
   */
   function focalPointChanged(left, top) {
-    console.log("focalPointChanged", left, top);
-
     if (left === null && top === null) {
       $scope.model.value.focalPoint = null;
     }
@@ -79,7 +79,7 @@ function HotspotController($scope, entityResource) {
     }
 
     //set form to dirty to track changes
-    //setDirty();
+    setDirty();
   }
 
   function imageLoaded(isCroppable, hasDimensions) {
@@ -88,8 +88,8 @@ function HotspotController($scope, entityResource) {
   }
 
   function setDirty() {
-    if ($scope.imageCropperForm) {
-      $scope.imageCropperForm.modelValue.$setDirty();
+    if ($scope.hotspotForm) {
+      $scope.hotspotForm.modelValue.$setDirty();
     }
   }
 
