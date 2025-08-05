@@ -3,7 +3,6 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core.Strings;
 using Umbraco.Cms.Infrastructure.Serialization;
-using static Umbraco.Cms.Core.PropertyEditors.ValueConverters.ImageCropperValue;
 
 namespace Umbraco.Community.Hotspots.Converters;
 
