@@ -11,8 +11,15 @@ namespace Umbraco.Community.Hotspots.Converters;
 /// </summary>
 [JsonConverter(typeof(NoTypeConverterJsonConverter<HotspotValue>))]
 [TypeConverter(typeof(HotspotValueConverter))]
+[DataContract]
 public class HotspotValue : IHtmlEncodedString, IEquatable<HotspotValue>
 {
+    /// <summary>
+    ///     Gets or sets the value media key.
+    /// </summary>
+    [DataMember(Name = "mediaKey")]
+    public string? MediaKey { get; set; }
+
     /// <summary>
     ///     Gets or sets the value source image.
     /// </summary>
@@ -45,6 +52,7 @@ public class HotspotValue : IHtmlEncodedString, IEquatable<HotspotValue>
     public bool HasImage()
         => !string.IsNullOrWhiteSpace(Src);
 
+    [DataContract]
     public class HotspotFocalPoint : IEquatable<HotspotFocalPoint>
     {
         [DataMember(Name = "left")] public decimal Left { get; set; }

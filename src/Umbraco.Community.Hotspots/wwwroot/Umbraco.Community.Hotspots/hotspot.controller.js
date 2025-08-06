@@ -8,7 +8,8 @@ function HotspotController($scope, entityResource) {
 
   //setup the default config
   const config = {
-    mediaKey: null
+    mediaKey: null,
+    hideHotspot: false
   };
 
   // map the user config
@@ -18,6 +19,10 @@ function HotspotController($scope, entityResource) {
   $scope.model.config = config;
 
   function init() {
+
+    if ($scope.model.config.hideHotspot) {
+      $scope.model.value.focalPoint = null;
+    }
 
     setModelValueWithSrc($scope.model.config?.source?.src);
 

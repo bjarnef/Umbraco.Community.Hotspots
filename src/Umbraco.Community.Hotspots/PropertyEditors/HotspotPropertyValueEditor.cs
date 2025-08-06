@@ -9,6 +9,8 @@ using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Serialization;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Strings;
+using Umbraco.Community.Hotspots.Converters;
+using Umbraco.Community.Hotspots.Extensions;
 using Umbraco.Extensions;
 
 namespace Umbraco.Community.Hotspots.PropertyEditors;
@@ -19,60 +21,50 @@ namespace Umbraco.Community.Hotspots.PropertyEditors;
 internal class HotspotPropertyValueEditor : DataValueEditor
 {
     private readonly IDataTypeService _dataTypeService;
-    private readonly IFileStreamSecurityValidator _fileStreamSecurityValidator;
     private readonly ILogger<HotspotPropertyValueEditor> _logger;
-    private readonly MediaFileManager _mediaFileManager;
-    private ContentSettings _contentSettings;
 
     public HotspotPropertyValueEditor(
         DataEditorAttribute attribute,
         ILogger<HotspotPropertyValueEditor> logger,
-        MediaFileManager mediaFileSystem,
         ILocalizedTextService localizedTextService,
         IShortStringHelper shortStringHelper,
-        IOptionsMonitor<ContentSettings> contentSettings,
         IJsonSerializer jsonSerializer,
         IIOHelper ioHelper,
-        IDataTypeService dataTypeService,
-        IFileStreamSecurityValidator fileStreamSecurityValidator)
+        IDataTypeService dataTypeService)
         : base(localizedTextService, shortStringHelper, jsonSerializer, ioHelper, attribute)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _mediaFileManager = mediaFileSystem ?? throw new ArgumentNullException(nameof(mediaFileSystem));
-        _contentSettings = contentSettings.CurrentValue;
         _dataTypeService = dataTypeService;
-        _fileStreamSecurityValidator = fileStreamSecurityValidator;
-        contentSettings.OnChange(x => _contentSettings = x);
     }
 
     /// <summary>
     /// </summary>
-    //public override object? ToEditor(IProperty property, string? culture = null, string? segment = null)
-    //{
-    //    var val = property.GetValue(culture, segment);
-    //    if (val == null)
-    //    {
-    //        return null;
-    //    }
+    public override object? ToEditor(IProperty property, string? culture = null, string? segment = null)
+    {
+        var val = property.GetValue(culture, segment);
+        if (val == null)
+        {
+            return null;
+        }
 
-    //    ImageCropperValue? value;
-    //    try
-    //    {
-    //        value = JsonConvert.DeserializeObject<ImageCropperValue>(val.ToString()!);
-    //    }
-    //    catch
-    //    {
-    //        value = new ImageCropperValue { Src = val.ToString() };
-    //    }
+        HotspotValue? value;
+        try
+        {
+            value = JsonConvert.DeserializeObject<HotspotValue>(val.ToString()!);
+        }
+        catch
+        {
+            value = new HotspotValue { Src = val.ToString() };
+        }
 
-    //    IDataType? dataType = _dataTypeService.GetDataType(property.PropertyType.DataTypeId);
-    //    if (dataType?.Configuration != null)
-    //    {
-    //        value?.ApplyConfiguration(dataType.ConfigurationAs<ImageCropperConfiguration>());
-    //    }
+        IDataType? dataType = _dataTypeService.GetDataType(property.PropertyType.DataTypeId);
+        if (dataType?.Configuration != null)
+        {
+            value?.ApplyConfiguration(dataType.ConfigurationAs<HotspotConfiguration>());
+        }
 
-    //    return value;
-    //}
+        return value;
+    }
 
     /// <summary>
     ///     Converts the value received from the editor into the value can be stored in the database.

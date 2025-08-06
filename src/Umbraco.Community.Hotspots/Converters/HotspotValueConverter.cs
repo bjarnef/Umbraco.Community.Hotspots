@@ -5,6 +5,7 @@ using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.PropertyEditors.DeliveryApi;
 using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
+using Umbraco.Cms.Core.PublishedCache;
 using Umbraco.Cms.Core.Serialization;
 using Umbraco.Community.Hotspots.Extensions;
 using Umbraco.Community.Hotspots.Models.DeliveryApi;
@@ -25,14 +26,17 @@ public class HotspotValueConverter : PropertyValueConverterBase, IDeliveryApiPro
         FloatParseHandling = FloatParseHandling.Decimal,
     };*/
 
+    private readonly IPublishedSnapshotAccessor _publishedSnapshotAccessor;
     private readonly IJsonSerializer _jsonSerializer;
-
     private readonly ILogger<HotspotValueConverter> _logger;
 
-    public HotspotValueConverter(ILogger<HotspotValueConverter> logger, IJsonSerializer jsonSerializer)
+    public HotspotValueConverter(IPublishedSnapshotAccessor publishedSnapshotAccessor, IJsonSerializer jsonSerializer, ILogger<HotspotValueConverter> logger)
     {
-        _logger = logger;
+        _publishedSnapshotAccessor = publishedSnapshotAccessor ??
+                                     throw new ArgumentNullException(nameof(publishedSnapshotAccessor));
+        
         _jsonSerializer = jsonSerializer;
+        _logger = logger;
     }
 
     /// <inheritdoc />
@@ -57,6 +61,8 @@ public class HotspotValueConverter : PropertyValueConverterBase, IDeliveryApiPro
 
         var sourceString = source.ToString()!;
 
+        IPublishedSnapshot publishedSnapshot = _publishedSnapshotAccessor.GetRequiredPublishedSnapshot();
+
         HotspotValue? value;
         try
         {
@@ -67,6 +73,10 @@ public class HotspotValueConverter : PropertyValueConverterBase, IDeliveryApiPro
             _logger.LogError(ex, "Could not deserialize string '{JsonString}' into an hotspot value.", sourceString);
             value = new HotspotValue { Src = sourceString };
         }
+
+        value?.ApplyConfiguration(propertyType.DataType.ConfigurationAs<HotspotConfiguration>()!);
+
+        //IPublishedContent? mediaItem = publishedSnapshot.Media?.GetById(preview, dto.MediaKey);
 
         return value;
     }

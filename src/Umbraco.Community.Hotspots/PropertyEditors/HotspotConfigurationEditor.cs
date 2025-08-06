@@ -18,7 +18,10 @@ internal class HotspotConfigurationEditor : ConfigurationEditor<HotspotConfigura
     public override IDictionary<string, object> ToValueEditor(object? configuration)
     {
         IDictionary<string, object> d = base.ToValueEditor(configuration);
-        if (!d.ContainsKey("focalPoint"))
+
+        bool hideHotspot = d.TryGetValue("hideHotspot", out object? hideHotspotValue) && hideHotspotValue is bool hide && hide;
+
+        if (!d.ContainsKey("focalPoint") && !hideHotspot)
         {
             d["focalPoint"] = new { left = 0.5, top = 0.5 };
         }

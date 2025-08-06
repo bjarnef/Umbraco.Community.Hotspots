@@ -1,5 +1,4 @@
 using System.Runtime.Serialization;
-using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.PropertyEditors;
 
 namespace Umbraco.Community.Hotspots.PropertyEditors;
@@ -11,6 +10,9 @@ public class HotspotConfiguration
 {
     [ConfigurationField("source", "Image", "/App_Plugins/Umbraco.Community.Hotspots/source-image.html", Description = "Choose the source image to select hotspots.")]
     public SourceImage? Source { get; set; }
+
+    [ConfigurationField("hideHotspot", "Hide Hotspot", "boolean", Description = "Hide hotspot initially.")]
+    public bool HideHotspot { get; set; }
 
     [DataContract]
     public class SourceImage
