@@ -15,10 +15,10 @@ namespace Umbraco.Community.Hotspots.Converters;
 public class HotspotValue : IHtmlEncodedString, IEquatable<HotspotValue>
 {
     /// <summary>
-    ///     Gets or sets the value media key.
+    ///     Gets or sets the value media id.
     /// </summary>
-    [DataMember(Name = "mediaKey")]
-    public string? MediaKey { get; set; }
+    [DataMember(Name = "mediaId")]
+    public Guid? MediaId { get; set; }
 
     /// <summary>
     ///     Gets or sets the value source image.

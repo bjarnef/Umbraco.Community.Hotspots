@@ -14,6 +14,6 @@ internal static class HotspotConfigurationExtensions
     {
         var source = configuration?.Source;
 
-        hotspotValue.MediaKey = source?.MediaKey?.ToString();
+        hotspotValue.MediaId = source?.MediaKey;
     }
 }

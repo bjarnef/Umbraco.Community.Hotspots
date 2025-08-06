@@ -5,11 +5,12 @@
     <input type="hidden" name="modelValue" ng-model="model.value" />
 
     <div class="umb-cropper-imageholder clearfix" ng-class="{ 'hotspot-hidden': !model.value.focalPoint }">
-      <umb-image-gravity src="imageSrc"
-                         center="model.value.focalPoint"
-                         on-value-changed="vm.focalPointChanged(left, top)"
-                         on-image-loaded="vm.imageLoaded(isCroppable, hasDimensions)"
-                         disable-focal-point="readonly">
+      <umb-image-gravity
+          src="imageSrc"
+          center="model.value.focalPoint"
+          on-value-changed="vm.focalPointChanged(left, top)"
+          on-image-loaded="vm.imageLoaded(isCroppable, hasDimensions)"
+          disable-focal-point="readonly">
       </umb-image-gravity>
 
       <div ng-if="!readonly" class="umb-cropper-imageholder-buttons">

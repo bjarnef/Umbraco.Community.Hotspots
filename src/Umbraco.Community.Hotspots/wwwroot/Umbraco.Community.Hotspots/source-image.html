@@ -1,7 +1,7 @@
 <div class="umb-property-editor umb-property-editor--limit-width" ng-controller="Umbraco.Community.Hotspots.PrevalueEditors.SourceImageController as vm">
 
   <div>
-    <div class="flex" style="gap: 1rem;">
+    <div class="flex mb2" style="gap: 1rem;">
       <umb-radiobutton
           name="type"
           value="media"
@@ -39,7 +39,6 @@
       </button>
     </div>
     <div ng-if="model.value.type === 'staticAsset'" class="umb-media-card-grid">
-
       <div class="umb-media-card" ng-if="model.value !== null && model.value.src !== null">
         <div class="__showcase">
           <umb-media-preview
@@ -59,9 +58,15 @@
           </button>
         </div>
       </div>
-
-      <button type="button" class="umb-node-preview-add" ng-if="model.value === null || model.value.src === null" ng-click="vm.select()" aria-hidden="false">
-        <localize key="general_add" class="ng-isolate-scope">Add</localize>
+      <button
+        type="button"
+        class="btn-reset umb-media-card-grid__create-button umb-outline"
+        ng-if="model.value === null || model.value.src === null"
+        ng-click="vm.select()">
+        <div>
+          <umb-icon icon="icon-add" class="icon large"></umb-icon>
+          <localize key="general_add">Add</localize>
+        </div>
       </button>
     </div>
     

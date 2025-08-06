@@ -89,6 +89,7 @@ public class HotspotValueConverter : PropertyValueConverterBase, IDeliveryApiPro
         => inter is HotspotValue { Src: { } } hotspotValue
             ? new ApiHotspotValue(
                 hotspotValue.Src,
+                hotspotValue.MediaId,
                 hotspotValue.GetImageFocalPoint())
             : null;
 }
