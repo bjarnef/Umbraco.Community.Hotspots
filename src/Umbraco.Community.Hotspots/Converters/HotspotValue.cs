@@ -10,7 +10,7 @@ namespace Umbraco.Community.Hotspots.Converters;
 ///     Represents a value of the hotspot value editor.
 /// </summary>
 [JsonConverter(typeof(NoTypeConverterJsonConverter<HotspotValue>))]
-[TypeConverter(typeof(HotspotValueConverter))]
+[TypeConverter(typeof(HotspotValueTypeConverter))]
 [DataContract]
 public class HotspotValue : IHtmlEncodedString, IEquatable<HotspotValue>
 {
@@ -44,7 +44,7 @@ public class HotspotValue : IHtmlEncodedString, IEquatable<HotspotValue>
     /// </summary>
     /// <returns></returns>
     public bool HasFocalPoint()
-        => FocalPoint is not null; // && (FocalPoint.Left != 0.5m || FocalPoint.Top != 0.5m);
+        => FocalPoint is not null; //&& (FocalPoint.Left != 0.5m || FocalPoint.Top != 0.5m);
 
     /// <summary>
     ///     Determines whether the value has a source image.

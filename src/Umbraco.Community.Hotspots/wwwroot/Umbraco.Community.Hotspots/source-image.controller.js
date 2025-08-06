@@ -54,29 +54,10 @@ function SourceImageController($scope, entityResource, editorService, localizati
   function addMedia(createIndex, $event) {
 
     const mediaPicker = {
-      /*startNodeId: vm.model.config.startNodeId,
-      startNodeIsVirtual: vm.model.config.startNodeIsVirtual,
-      dataTypeKey: vm.model.dataTypeKey,*/
       multiPicker: false,
       onlyImages: true,
       disableFolderSelect: true,
-      /*clickPasteItem: function (item, mouseEvent) {
-
-        if (Array.isArray(item.data)) {
-          var indexIncrementor = 0;
-          item.data.forEach(function (entry) {
-            if (requestPasteFromClipboard(createIndex + indexIncrementor, entry, item.type)) {
-              indexIncrementor++;
-            }
-          });
-        } else {
-          requestPasteFromClipboard(createIndex, item.data, item.type);
-        }
-        if (!(mouseEvent.ctrlKey || mouseEvent.metaKey)) {
-          mediaPicker.close();
-        }
-      },*/
-      submit: function (model) {
+      submit: (model) => {
         editorService.close();
 
         var indexIncrementor = 0;
@@ -93,23 +74,10 @@ function SourceImageController($scope, entityResource, editorService, localizati
 
         setDirty();
       },
-      close: function () {
+      close: () => {
         editorService.close();
       }
-    }
-
-    /*if (vm.model.config.filter) {
-      mediaPicker.filter = vm.model.config.filter;
-    }*/
-
-    /*mediaPicker.clickClearClipboard = function ($event) {
-      clipboardService.clearEntriesOfType(clipboardService.TYPES.Media, vm.allowedTypes || null);
     };
-
-    mediaPicker.clipboardItems = clipboardService.retrieveEntriesOfType(clipboardService.TYPES.MEDIA, vm.allowedTypes || null);
-    mediaPicker.clipboardItems.sort((a, b) => {
-      return b.date - a.date
-    });*/
 
     editorService.mediaPicker(mediaPicker);
   }
@@ -199,8 +167,8 @@ function SourceImageController($scope, entityResource, editorService, localizati
   }
 
   function setDirty() {
-    if ($scope.imageCropperForm) {
-      $scope.imageCropperForm.modelValue.$setDirty();
+    if ($scope.hotspotForm) {
+      $scope.hotspotForm.modelValue.$setDirty();
     }
   }
 
