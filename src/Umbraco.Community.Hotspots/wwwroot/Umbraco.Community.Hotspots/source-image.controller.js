@@ -145,7 +145,6 @@ function SourceImageController($scope, entityResource, editorService, localizati
         filterCssClass: "not-allowed",
         select: file => {
           const id = decodeURIComponent(file.id.replace(/\+/g, " "));
-          //block.thumbnail = "~/" + id.replace("wwwroot/", "");
           const url = "~/" + id.replace("wwwroot/", "");
 
           vm.image = {

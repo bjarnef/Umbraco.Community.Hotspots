@@ -1,9 +1,6 @@
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core;
-using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.IO;
-using Umbraco.Cms.Core.Media;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
@@ -27,13 +24,9 @@ public class HotspotPropertyEditor : DataEditor
 
     public const string PropertyEditorAlias = "Umbraco.Community.Hotspot";
 
-    private readonly IContentService _contentService;
-    private readonly IDataTypeService _dataTypeService;
     private readonly IEditorConfigurationParser _editorConfigurationParser;
     private readonly IIOHelper _ioHelper;
     private readonly ILogger<HotspotPropertyEditor> _logger;
-    private readonly MediaFileManager _mediaFileManager;
-    private ContentSettings _contentSettings;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="HotspotPropertyEditor" /> class.
@@ -41,23 +34,13 @@ public class HotspotPropertyEditor : DataEditor
     public HotspotPropertyEditor(
         IDataValueEditorFactory dataValueEditorFactory,
         ILoggerFactory loggerFactory,
-        MediaFileManager mediaFileManager,
-        IOptionsMonitor<ContentSettings> contentSettings,
-        IDataTypeService dataTypeService,
         IIOHelper ioHelper,
-        IContentService contentService,
         IEditorConfigurationParser editorConfigurationParser)
         : base(dataValueEditorFactory)
     {
-        _mediaFileManager = mediaFileManager ?? throw new ArgumentNullException(nameof(mediaFileManager));
-        _contentSettings = contentSettings.CurrentValue ?? throw new ArgumentNullException(nameof(contentSettings));
-        _dataTypeService = dataTypeService ?? throw new ArgumentNullException(nameof(dataTypeService));
         _ioHelper = ioHelper ?? throw new ArgumentNullException(nameof(ioHelper));
-        _contentService = contentService;
         _editorConfigurationParser = editorConfigurationParser;
         _logger = loggerFactory.CreateLogger<HotspotPropertyEditor>();
-
-        contentSettings.OnChange(x => _contentSettings = x);
         SupportsReadOnly = true;
     }
 

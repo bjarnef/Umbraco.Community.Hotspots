@@ -4,25 +4,27 @@
 
     <input type="hidden" name="modelValue" ng-model="model.value" />
 
-    <div class="umb-cropper-imageholder clearfix" ng-class="{ 'hotspot-hidden': !model.value.focalPoint }">
+    <div class="umb-cropper-imageholder clearfix" ng-class="{ 'hotspot-hidden': !model.value || !model.value.focalPoint }">
       <umb-image-gravity
           src="imageSrc"
-          center="model.value.focalPoint"
+          center="(model.value ? model.value.focalPoint : vm.defaultPosition)"
           on-value-changed="vm.focalPointChanged(left, top)"
           on-image-loaded="vm.imageLoaded(isCroppable, hasDimensions)"
           disable-focal-point="readonly">
       </umb-image-gravity>
 
       <div ng-if="!readonly" class="umb-cropper-imageholder-buttons">
-        <button type="button" ng-show="model.value.focalPoint" class="btn btn-link btn-gravity-reset" ng-click="vm.clear()">
+        <button type="button" ng-show="model.value && model.value.focalPoint" class="btn btn-link btn-gravity-reset" ng-click="vm.clear()">
           <umb-icon icon="icon-delete"></umb-icon> Clear focal point
         </button>
-        <button type="button" ng-show="(model.value.focalPoint && model.value.focalPoint.left !== 0.5 && model.value.focalPoint.top !== 0.5)" class="btn btn-link btn-gravity-reset" ng-click="vm.focalPointChanged(0.5,0.5)">
+        <button type="button" ng-show="(model.value && model.value.focalPoint && model.value.focalPoint.left !== 0.5 && model.value.focalPoint.top !== 0.5)" class="btn btn-link btn-gravity-reset" ng-click="vm.focalPointChanged(0.5,0.5)">
           <umb-icon icon="icon-axis-rotation"></umb-icon> <localize key="content_resetFocalPoint">Reset focal point</localize>
         </button>
       </div>
 
     </div>
+
+    <pre>{{model.config | json}}</pre>
 
     <pre>{{model.value | json}}</pre>
 

@@ -6,9 +6,14 @@ function HotspotController($scope, entityResource) {
   vm.focalPointChanged = focalPointChanged;
   vm.imageLoaded = imageLoaded;
 
+  vm.defaultPosition = {
+    left: 0.5,
+    top: 0.5
+  };
+
   //setup the default config
   const config = {
-    mediaKey: null,
+    source: null,
     hideHotspot: false
   };
 
@@ -20,11 +25,7 @@ function HotspotController($scope, entityResource) {
 
   function init() {
 
-    if ($scope.model.config.hideHotspot) {
-      $scope.model.value.focalPoint = null;
-    }
-
-    setModelValueWithSrc($scope.model.config?.source?.src);
+    setModelValueWithSrc($scope.model.config.source);
 
     retrieveMedia();
   }
@@ -55,12 +56,12 @@ function HotspotController($scope, entityResource) {
 
   /**
   * Used to assign a new model value
-  * @param {any} src
+  * @param {any} source
   */
-  function setModelValueWithSrc(src) {
+  function setModelValueWithSrc(source) {
     if (!$scope.model.value || !$scope.model.value.src) {
       //we are copying to not overwrite the original config
-      $scope.model.value = Utilities.extend(Utilities.copy($scope.model.config), { src: src });
+      $scope.model.value = Utilities.extend(Utilities.copy($scope.model.config), { src: source?.src, mediaId: source?.mediaKey });
     }
 
     delete $scope.model.value.source;
@@ -72,6 +73,7 @@ function HotspotController($scope, entityResource) {
   * @param {any} top
   */
   function focalPointChanged(left, top) {
+    console.log("focalPointChanged", left, top);
     if (left === null && top === null) {
       $scope.model.value.focalPoint = null;
     }

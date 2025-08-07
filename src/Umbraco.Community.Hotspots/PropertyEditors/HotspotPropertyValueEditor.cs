@@ -1,14 +1,19 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.Editors;
+using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
-using Umbraco.Cms.Core.Security;
+using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
 using Umbraco.Cms.Core.Serialization;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Strings;
+using Umbraco.Cms.Infrastructure.PublishedCache;
 using Umbraco.Community.Hotspots.Converters;
 using Umbraco.Community.Hotspots.Extensions;
 using Umbraco.Extensions;
@@ -21,6 +26,8 @@ namespace Umbraco.Community.Hotspots.PropertyEditors;
 internal class HotspotPropertyValueEditor : DataValueEditor
 {
     private readonly IDataTypeService _dataTypeService;
+    private readonly IMediaService _mediaService;
+    private readonly IJsonSerializer _jsonSerializer;
     private readonly ILogger<HotspotPropertyValueEditor> _logger;
 
     public HotspotPropertyValueEditor(
@@ -30,11 +37,14 @@ internal class HotspotPropertyValueEditor : DataValueEditor
         IShortStringHelper shortStringHelper,
         IJsonSerializer jsonSerializer,
         IIOHelper ioHelper,
-        IDataTypeService dataTypeService)
+        IDataTypeService dataTypeService,
+        IMediaService mediaService)
         : base(localizedTextService, shortStringHelper, jsonSerializer, ioHelper, attribute)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _dataTypeService = dataTypeService;
+        _jsonSerializer = jsonSerializer;
+        _mediaService = mediaService;
     }
 
     /// <summary>
@@ -63,6 +73,20 @@ internal class HotspotPropertyValueEditor : DataValueEditor
             value?.ApplyConfiguration(dataType.ConfigurationAs<HotspotConfiguration>());
         }
 
+        if (value?.MediaId is not null && value.MediaId is Guid mediaId)
+        {
+            IMedia? media = _mediaService.GetById(mediaId);
+
+            if (media != null)
+            {
+                value.Src = media.GetValue<string>(Constants.Conventions.Media.File);
+            }
+            else
+            {
+                _logger.LogWarning("Media item with ID '{MediaId}' not found for hotspot value.", value.MediaId);
+            }
+        }
+
         return value;
     }
 
@@ -72,17 +96,43 @@ internal class HotspotPropertyValueEditor : DataValueEditor
     /// <param name="editorValue">The value received from the editor.</param>
     /// <param name="currentValue">The current value of the property</param>
     /// <returns>The converted value.</returns>
-    /// <remarks>
-    ///     <para>The <paramref name="currentValue" /> is used to re-use the folder, if possible.</para>
-    ///     <para>
-    ///         editorValue.Value is used to figure out editorFile and, if it has been cleared, remove the old file - but
-    ///         it is editorValue.AdditionalData["files"] that is used to determine the actual file that has been uploaded.
-    ///     </para>
-    /// </remarks>
-    //public override object? FromEditor(ContentPropertyData editorValue, object? currentValue)
-    //{
+    public override object? FromEditor(ContentPropertyData editorValue, object? currentValue)
+    {
+        HotspotValue? editorHotspotValue = null;
 
-    //}
+        try
+        {
+            if (editorValue.Value?.ToString() is string editorStringValue)
+            {
+                editorHotspotValue = _jsonSerializer.Deserialize<HotspotValue>(editorStringValue);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Could not parse current editor value to an HotspotValue object.");
+        }
+
+        // ensure we have the required guids
+        Guid contentKey = editorValue.ContentKey;
+        if (contentKey == Guid.Empty)
+        {
+            throw new Exception("Invalid content key.");
+        }
+
+        Guid propertyTypeKey = editorValue.PropertyTypeKey;
+        if (propertyTypeKey == Guid.Empty)
+        {
+            throw new Exception("Invalid property type key.");
+        }
+
+        // update json and return
+        if (editorHotspotValue == null)
+        {
+            return null;
+        }
+
+        return _jsonSerializer.Serialize(editorHotspotValue);
+    }
 
     public override string ConvertDbToString(IPropertyType propertyType, object? value)
     {

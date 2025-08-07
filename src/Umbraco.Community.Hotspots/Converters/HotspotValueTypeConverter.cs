@@ -31,13 +31,13 @@ public class HotspotValueTypeConverter : TypeConverter
 
     public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
     {
-        if (value is not HotspotValue cropperValue)
+        if (value is not HotspotValue hotspotValue)
         {
             return null;
         }
 
         return TypeHelper.IsTypeAssignableFrom<JObject>(destinationType)
-            ? JObject.FromObject(cropperValue)
+            ? JObject.FromObject(hotspotValue)
             : base.ConvertTo(context, culture, value, destinationType);
     }
 }

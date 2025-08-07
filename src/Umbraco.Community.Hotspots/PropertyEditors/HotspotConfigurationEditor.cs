@@ -17,20 +17,20 @@ internal class HotspotConfigurationEditor : ConfigurationEditor<HotspotConfigura
     /// <inheritdoc />
     public override IDictionary<string, object> ToValueEditor(object? configuration)
     {
-        IDictionary<string, object> d = base.ToValueEditor(configuration);
+        IDictionary<string, object> config = base.ToValueEditor(configuration);
 
-        bool hideHotspot = d.TryGetValue("hideHotspot", out object? hideHotspotValue) && hideHotspotValue is bool hide && hide;
+        bool hideHotspot = config.TryGetValue("hideHotspot", out object? hideHotspotValue) && hideHotspotValue is bool hide && hide;
 
-        if (!d.ContainsKey("focalPoint") && !hideHotspot)
+        if (!config.ContainsKey("focalPoint"))
         {
-            d["focalPoint"] = new { left = 0.5, top = 0.5 };
+            config["focalPoint"] = !hideHotspot ? new { left = 0.5, top = 0.5 } : null!;
         }
 
-        if (!d.ContainsKey("src"))
+        if (!config.ContainsKey("src"))
         {
-            d["src"] = string.Empty;
+            config["src"] = string.Empty;
         }
 
-        return d;
+        return config;
     }
 }

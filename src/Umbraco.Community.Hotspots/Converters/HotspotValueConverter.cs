@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.PropertyEditors.DeliveryApi;
@@ -76,7 +77,19 @@ public class HotspotValueConverter : PropertyValueConverterBase, IDeliveryApiPro
 
         value?.ApplyConfiguration(propertyType.DataType.ConfigurationAs<HotspotConfiguration>()!);
 
-        //IPublishedContent? mediaItem = publishedSnapshot.Media?.GetById(preview, dto.MediaKey);
+        if (value?.MediaId is not null && value.MediaId is Guid mediaId)
+        {
+            IPublishedContent? mediaItem = publishedSnapshot.Media?.GetById(preview, mediaId);
+
+            if (mediaItem != null)
+            {
+                value.Src = mediaItem.Value<string>(Constants.Conventions.Media.File);
+            }
+            else
+            {
+                _logger.LogWarning("Media item with ID '{MediaId}' not found for hotspot value.", value.MediaId);
+            }
+        }
 
         return value;
     }
