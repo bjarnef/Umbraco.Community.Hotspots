@@ -14,13 +14,18 @@ If you put images into /docs/screenshots, then you would reference them in this 
 <img alt="..." src="https://github.com/bjarnef/Umbraco.Community.Hotspots/blob/develop/docs/screenshots/screenshot.png">
 -->
 
+## Features
+
+- Choose either media or a static asset as the source image
+- Optionally set a hotspot for the image
+- Configure whether the hotspot should be set initially
+
 ## Installation
 
 Add the package to an existing Umbraco website (v13+) from nuget:
 
 `dotnet add package Umbraco.Community.Umbraco.Community.Hotspots`
 
-TODO *provide any other instructions for someone using your package*
 
 ## Contributing
 
