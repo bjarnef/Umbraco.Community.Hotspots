@@ -33,4 +33,4 @@ Contributions to this package are most welcome! Please read the [Contributing Gu
 
 ## License
 
-Licensed under the [MIT License](../LICENSE.md).
+Licensed under the [MIT License](LICENSE.md).
