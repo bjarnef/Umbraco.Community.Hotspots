@@ -17,9 +17,24 @@ Hotspot editor for Umbraco.
 
 ## Installation
 
-Add the package to an existing Umbraco website (v13+) from nuget:
+> [!IMPORTANT]
+> **v1.x** supports Umbraco v13.x
+> 
+> To understand more about which Umbraco CMS versions are actively supported by Umbraco HQ, please see [Umbraco's Long-term Support (LTS) and End-of-Life (EOL) policy](https://umbraco.com/products/knowledge-center/long-term-support-and-end-of-life/).
 
-`dotnet add package Umbraco.Community.Umbraco.Community.Hotspots`
+This package is [available via NuGet](https://www.nuget.org/packages/Umbraco.Community.Hotspots).
+
+To install the package, you can use either the .NET CLI:
+
+```
+dotnet add package Umbraco.Community.Hotspots
+```
+
+or the NuGet Package Manager:
+
+```
+Install-Package Umbraco.Community.Hotspots
+```
 
 
 ## Contributing
