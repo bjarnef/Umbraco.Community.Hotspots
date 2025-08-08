@@ -10,14 +10,19 @@
     <Title>Umbraco Community Hotspots</Title>
     <Description>Hotspot editor for Umbraco.</Description>
     <PackageTags>umbraco;umbraco-marketplace</PackageTags>
+    
     <RootNamespace>Umbraco.Community.Hotspots</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    
     <Version>0.1.0</Version>
     <Authors>Bjarne Fyrstenborg</Authors>
     <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Bjarne Fyrstenborg</Copyright>
+    
     <PackageProjectUrl>https://github.com/bjarnef/Umbraco.Community.Hotspots</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bjarnef/Umbraco.Community.Hotspots</RepositoryUrl>
     <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
@@ -28,6 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\.docs\icons\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\..\docs\README_nuget.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
