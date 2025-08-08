@@ -6,19 +6,14 @@
 
 Hotspot editor for Umbraco.
 
-<!--
-Including screenshots is a really good idea! 
-
-If you put images into /docs/screenshots, then you would reference them in this readme as, for example:
-
-<img alt="..." src="https://github.com/bjarnef/Umbraco.Community.Hotspots/blob/develop/docs/screenshots/screenshot.png">
--->
-
 ## Features
 
 - Choose either media or a static asset as the source image
 - Optionally set a hotspot for the image
 - Configure whether the hotspot should be set initially
+- Works with ModelsBuilder & Umbraco Delivery API
+
+<img alt="Hotspot editor" src="https://github.com/bjarnef/Umbraco.Community.Hotspots/blob/main/docs/screenshots/hotspot-editor.png">
 
 ## Installation
 

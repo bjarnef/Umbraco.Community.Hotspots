@@ -11,3 +11,4 @@ Hotspot editor for Umbraco.
 - Choose either media or a static asset as the source image
 - Optionally set a hotspot for the image
 - Configure whether the hotspot should be set initially
+- Works with ModelsBuilder & Umbraco Delivery API
