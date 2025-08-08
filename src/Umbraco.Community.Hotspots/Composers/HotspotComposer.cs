@@ -1,13 +1,13 @@
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 
-namespace Umbraco.Community.Hotspots
+namespace Umbraco.Community.Hotspots.Composers
 {
-    internal class HotspotsComposer : IComposer
+    internal class HotspotComposer : IComposer
     {
         public void Compose(IUmbracoBuilder builder)
         {
-            builder.ManifestFilters().Append<HotspotsManifestFilter>();
+            builder.ManifestFilters().Append<HotspotManifestFilter>();
         }
     }
 }

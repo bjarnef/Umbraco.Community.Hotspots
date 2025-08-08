@@ -2,11 +2,11 @@ using Umbraco.Cms.Core.Manifest;
 
 namespace Umbraco.Community.Hotspots
 {
-    internal class HotspotsManifestFilter : IManifestFilter
+    internal class HotspotManifestFilter : IManifestFilter
     {
         public void Filter(List<PackageManifest> manifests)
         {
-            var assembly = typeof(HotspotsManifestFilter).Assembly;
+            var assembly = typeof(HotspotManifestFilter).Assembly;
 
             manifests.Add(new PackageManifest
             {
