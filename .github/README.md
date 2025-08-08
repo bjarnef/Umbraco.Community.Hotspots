@@ -31,6 +31,6 @@ Add the package to an existing Umbraco website (v13+) from nuget:
 
 Contributions to this package are most welcome! Please read the [Contributing Guidelines](CONTRIBUTING.md).
 
-## Acknowledgments
+## License
 
-TODO
+Licensed under the [MIT License](../LICENSE.md).
