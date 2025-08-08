@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\.docs\icons\icon.png">
+    <None Include="..\..\docs\icons\icon.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
