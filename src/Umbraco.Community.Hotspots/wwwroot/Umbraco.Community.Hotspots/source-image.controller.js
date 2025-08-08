@@ -65,8 +65,6 @@ function SourceImageController($scope, entityResource, editorService, localizati
           var mediaEntry = {};
           mediaEntry.key = String.CreateGuid();
           mediaEntry.mediaKey = entry.key;
-          //updateMediaEntryData(mediaEntry);
-          //$scope.model.value.splice(createIndex + indexIncrementor, 0, mediaEntry);
           $scope.model.value.mediaKey = mediaEntry.mediaKey;
           $scope.model.value.src = null;
           indexIncrementor++;
@@ -154,7 +152,7 @@ function SourceImageController($scope, entityResource, editorService, localizati
           };
 
           $scope.model.value.mediaKey = null;
-          $scope.model.value.src = url;
+          $scope.model.value.src = vm.image.source;
 
           editorService.close();
         },
