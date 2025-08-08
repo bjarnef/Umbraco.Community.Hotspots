@@ -36,11 +36,10 @@ or the NuGet Package Manager:
 Install-Package Umbraco.Community.Hotspots
 ```
 
-
 ## Contributing
 
 Contributions to this package are most welcome! Please read the [Contributing Guidelines](CONTRIBUTING.md).
 
 ## License
 
-Licensed under the [MIT License](LICENSE.md).
+Licensed under the [MIT License](https://github.com/bjarnef/Umbraco.Community.Hotspots/blob/main/LICENSE).
