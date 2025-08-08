@@ -28,7 +28,7 @@ function SourceImageController($scope, entityResource, editorService, localizati
       const src = $scope.model.value.src;
       const ext = src.substring(src.lastIndexOf('.') + 1);
       vm.image = {
-        source: src.substring(1),
+        source: src.replace("~/", "/"),
         extension: ext,
         name: src.substring(src.lastIndexOf('/') + 1),
       };
@@ -164,8 +164,8 @@ function SourceImageController($scope, entityResource, editorService, localizati
   }
 
   function setDirty() {
-    if ($scope.hotspotForm) {
-      $scope.hotspotForm.modelValue.$setDirty();
+    if ($scope.hotspotSourceForm) {
+      $scope.hotspotSourceForm.modelValue.$setDirty();
     }
   }
 

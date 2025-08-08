@@ -6,12 +6,14 @@
           name="type"
           value="media"
           model="model.value.type"
+          required="true"
           text="Media">
       </umb-radiobutton>
       <umb-radiobutton
           name="type"
           value="staticAsset"
           model="model.value.type"
+          required="true"
           text="Static Asset">
       </umb-radiobutton>
     </div>
@@ -39,7 +41,7 @@
       </button>
     </div>
     <div ng-if="model.value.type === 'staticAsset'" class="umb-media-card-grid">
-      <div class="umb-media-card" ng-if="model.value !== null && model.value.src !== null">
+      <div class="umb-media-card" ng-if="model.value && model.value.src">
         <div class="__showcase">
           <umb-media-preview
             ng-if="vm.image"
@@ -48,12 +50,13 @@
             name="vm.image.name">
           </umb-media-preview>
         </div>
-        <div class="__actions" ng-if="model.value.src !== null">
-          <button type="button"
-                  class="btn-reset __action umb-outline"
-                  localize="title"
-                  title="general_remove"
-                  ng-click="vm.clear($event)">
+        <div class="__actions">
+          <button
+            type="button"
+            class="btn-reset __action umb-outline"
+            localize="title"
+            title="general_remove"
+            ng-click="vm.clear($event)">
             <umb-icon icon="icon-trash" class="icon"></umb-icon>
           </button>
         </div>
@@ -61,7 +64,7 @@
       <button
         type="button"
         class="btn-reset umb-media-card-grid__create-button umb-outline"
-        ng-if="model.value === null || model.value.src === null"
+        ng-if="!model.value || !model.value.src"
         ng-click="vm.select()">
         <div>
           <umb-icon icon="icon-add" class="icon large"></umb-icon>
