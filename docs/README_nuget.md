@@ -5,3 +5,9 @@
 [![GitHub license](https://img.shields.io/github/license/bjarnef/Umbraco.Community.Hotspots?color=8AB803)](https://github.com/bjarnef/Umbraco.Community.Hotspots/blob/main/LICENSE)
 
 Hotspot editor for Umbraco.
+
+## Features
+
+- Choose either media or a static asset as the source image
+- Optionally set a hotspot for the image
+- Configure whether the hotspot should be set initially

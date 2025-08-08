@@ -8,7 +8,7 @@
     <Product>Umbraco.Community.Hotspots</Product>
     <PackageId>Umbraco.Community.Hotspots</PackageId>
     <Title>Umbraco Community Hotspots</Title>
-    <Description>...</Description>
+    <Description>Hotspot editor for Umbraco.</Description>
     <PackageTags>umbraco;umbraco-marketplace</PackageTags>
     <RootNamespace>Umbraco.Community.Hotspots</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
