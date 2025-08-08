@@ -4,8 +4,11 @@
   "Description": "Hotspot editor for Umbraco.",
   "Tags": [
     "backoffice",
+    "focal point",
     "hotspot",
-    "image"
+    "image",
+    "picture",
+    "photo"
   ],
   "Category": "Editor Tools",
   "AuthorDetails": {
