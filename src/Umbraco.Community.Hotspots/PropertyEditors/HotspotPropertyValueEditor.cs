@@ -109,7 +109,7 @@ internal class HotspotPropertyValueEditor : DataValueEditor
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Could not parse current editor value to an HotspotValue object.");
+            _logger.LogWarning(ex, $"Could not parse current editor value to an {nameof(HotspotValue)} object.");
         }
 
         // ensure we have the required guids

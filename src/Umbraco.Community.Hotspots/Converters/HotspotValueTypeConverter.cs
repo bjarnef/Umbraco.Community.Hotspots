@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Umbraco.Cms.Core.Composing;
-using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
 
 namespace Umbraco.Community.Hotspots.Converters;
 
