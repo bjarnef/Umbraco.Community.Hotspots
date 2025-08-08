@@ -17,5 +17,15 @@
   },
   "LicenseTypes": [ "Free" ],
   "PackageType": "Package",
-  "IssueTrackerUrl": "https://github.com/bjarnef/Umbraco.Community.Hotspots/issues"
+  "IssueTrackerUrl": "https://github.com/bjarnef/Umbraco.Community.Hotspots/issues",
+  "Screenshots": [
+    {
+      "Caption": "Optionally set a hotspot for the image.",
+      "ImageUrl": "https://github.com/bjarnef/Umbraco.Community.Hotspots/blob/main/docs/screenshots/hotspot-editor.png"
+    },
+    {
+      "Caption": "Choose either media or a static asset as the source image.",
+      "ImageUrl": "https://github.com/bjarnef/Umbraco.Community.Hotspots/blob/main/docs/screenshots/hotspot-configuration.png"
+    }
+  ]
 }
