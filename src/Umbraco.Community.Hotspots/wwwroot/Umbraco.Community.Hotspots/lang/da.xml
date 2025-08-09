@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="da" intName="Danish" localName="Dansk" lcid="" culture="da-DK">
+    <area alias="Umbraco.Community.Hotspots">
+      <key alias="clearFocalPoint">Ryd fokuspunkt</key>
+    </area>
+</language>
