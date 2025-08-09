@@ -14,7 +14,7 @@
     <RootNamespace>Umbraco.Community.Hotspots</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     
-    <Version>0.1.0</Version>
+    <Version>1.0.0</Version>
     <Authors>Bjarne Fyrstenborg</Authors>
     <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Bjarne Fyrstenborg</Copyright>
     
