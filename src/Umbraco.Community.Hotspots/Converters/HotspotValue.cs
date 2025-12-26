@@ -1,35 +1,26 @@
-using System.ComponentModel;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core.Strings;
-using Umbraco.Cms.Infrastructure.Serialization;
 
 namespace Umbraco.Community.Hotspots.Converters;
 
 /// <summary>
 ///     Represents a value of the hotspot value editor.
 /// </summary>
-[JsonConverter(typeof(NoTypeConverterJsonConverter<HotspotValue>))]
-[TypeConverter(typeof(HotspotValueTypeConverter))]
-[DataContract]
 public class HotspotValue : IHtmlEncodedString, IEquatable<HotspotValue>
 {
     /// <summary>
     ///     Gets or sets the value media id.
     /// </summary>
-    [DataMember(Name = "mediaId")]
     public Guid? MediaId { get; set; }
 
     /// <summary>
     ///     Gets or sets the value source image.
     /// </summary>
-    [DataMember(Name = "src")]
     public string? Src { get; set; } = string.Empty;
 
     /// <summary>
     ///     Gets or sets the value focal point.
     /// </summary>
-    [DataMember(Name = "focalPoint")]
     public HotspotFocalPoint? FocalPoint { get; set; }
 
     /// <inheritdoc />
@@ -52,12 +43,11 @@ public class HotspotValue : IHtmlEncodedString, IEquatable<HotspotValue>
     public bool HasImage()
         => !string.IsNullOrWhiteSpace(Src);
 
-    [DataContract]
     public class HotspotFocalPoint : IEquatable<HotspotFocalPoint>
     {
-        [DataMember(Name = "left")] public decimal Left { get; set; }
+        public decimal Left { get; set; }
 
-        [DataMember(Name = "top")] public decimal Top { get; set; }
+        public decimal Top { get; set; }
 
         #region IEquatable
 

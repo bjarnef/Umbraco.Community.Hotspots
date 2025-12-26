@@ -25,6 +25,7 @@ namespace Umbraco.Community.Hotspots.PropertyEditors;
 /// </summary>
 internal class HotspotPropertyValueEditor : DataValueEditor
 {
+    private readonly IDataTypeConfigurationCache _dataTypeConfigurationCache;
     private readonly IDataTypeService _dataTypeService;
     private readonly IMediaService _mediaService;
     private readonly IJsonSerializer _jsonSerializer;
@@ -33,18 +34,19 @@ internal class HotspotPropertyValueEditor : DataValueEditor
     public HotspotPropertyValueEditor(
         DataEditorAttribute attribute,
         ILogger<HotspotPropertyValueEditor> logger,
-        ILocalizedTextService localizedTextService,
         IShortStringHelper shortStringHelper,
         IJsonSerializer jsonSerializer,
         IIOHelper ioHelper,
         IDataTypeService dataTypeService,
-        IMediaService mediaService)
-        : base(localizedTextService, shortStringHelper, jsonSerializer, ioHelper, attribute)
+        IMediaService mediaService,
+        IDataTypeConfigurationCache dataTypeConfigurationCache)
+        : base(shortStringHelper, jsonSerializer, ioHelper, attribute)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _dataTypeService = dataTypeService;
         _jsonSerializer = jsonSerializer;
         _mediaService = mediaService;
+        _dataTypeConfigurationCache = dataTypeConfigurationCache;
     }
 
     /// <summary>
@@ -67,10 +69,10 @@ internal class HotspotPropertyValueEditor : DataValueEditor
             value = new HotspotValue { Src = val.ToString() };
         }
 
-        IDataType? dataType = _dataTypeService.GetDataType(property.PropertyType.DataTypeId);
-        if (dataType?.Configuration != null)
+        HotspotConfiguration? configuration = _dataTypeConfigurationCache.GetConfigurationAs<HotspotConfiguration>(property.PropertyType.DataTypeKey);
+        if (configuration is not null)
         {
-            value?.ApplyConfiguration(dataType.ConfigurationAs<HotspotConfiguration>());
+            value?.ApplyConfiguration(configuration);
         }
 
         if (value?.MediaId is not null && value.MediaId is Guid mediaId)
@@ -148,8 +150,7 @@ internal class HotspotPropertyValueEditor : DataValueEditor
             return val;
         }
 
-        HotspotConfiguration? configuration = _dataTypeService.GetDataType(propertyType.DataTypeId)
-            ?.ConfigurationAs<HotspotConfiguration>();
+        HotspotConfiguration? configuration = _dataTypeConfigurationCache.GetConfigurationAs<HotspotConfiguration>(propertyType.DataTypeKey);
         HotspotConfiguration.SourceImage? source = configuration?.Source;
 
         return JsonConvert.SerializeObject(

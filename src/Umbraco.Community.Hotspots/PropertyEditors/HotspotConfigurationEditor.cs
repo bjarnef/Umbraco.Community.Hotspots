@@ -9,13 +9,13 @@ namespace Umbraco.Community.Hotspots.PropertyEditors;
 /// </summary>
 internal class HotspotConfigurationEditor : ConfigurationEditor<HotspotConfiguration>
 {
-    public HotspotConfigurationEditor(IIOHelper ioHelper, IEditorConfigurationParser editorConfigurationParser)
-        : base(ioHelper, editorConfigurationParser)
+    public HotspotConfigurationEditor(IIOHelper ioHelper)
+        : base(ioHelper)
     {
     }
 
     /// <inheritdoc />
-    public override IDictionary<string, object> ToValueEditor(object? configuration)
+    public override IDictionary<string, object> ToValueEditor(IDictionary<string, object> configuration)
     {
         IDictionary<string, object> config = base.ToValueEditor(configuration);
 

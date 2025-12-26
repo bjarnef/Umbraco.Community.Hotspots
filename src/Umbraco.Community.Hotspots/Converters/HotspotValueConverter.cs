@@ -27,14 +27,14 @@ public class HotspotValueConverter : PropertyValueConverterBase, IDeliveryApiPro
         FloatParseHandling = FloatParseHandling.Decimal,
     };*/
 
-    private readonly IPublishedSnapshotAccessor _publishedSnapshotAccessor;
+    private readonly IPublishedContentCache _publishedContentCache;
     private readonly IJsonSerializer _jsonSerializer;
     private readonly ILogger<HotspotValueConverter> _logger;
 
-    public HotspotValueConverter(IPublishedSnapshotAccessor publishedSnapshotAccessor, IJsonSerializer jsonSerializer, ILogger<HotspotValueConverter> logger)
+    public HotspotValueConverter(IPublishedContentCache publishedContentCache, IJsonSerializer jsonSerializer, ILogger<HotspotValueConverter> logger)
     {
-        _publishedSnapshotAccessor = publishedSnapshotAccessor ??
-                                     throw new ArgumentNullException(nameof(publishedSnapshotAccessor));
+        _publishedContentCache = publishedContentCache ??
+                                     throw new ArgumentNullException(nameof(publishedContentCache));
         
         _jsonSerializer = jsonSerializer;
         _logger = logger;
@@ -62,8 +62,6 @@ public class HotspotValueConverter : PropertyValueConverterBase, IDeliveryApiPro
 
         var sourceString = source.ToString()!;
 
-        IPublishedSnapshot publishedSnapshot = _publishedSnapshotAccessor.GetRequiredPublishedSnapshot();
-
         HotspotValue? value;
         try
         {
@@ -79,7 +77,7 @@ public class HotspotValueConverter : PropertyValueConverterBase, IDeliveryApiPro
 
         if (value?.MediaId is not null && value.MediaId is Guid mediaId)
         {
-            IPublishedContent? mediaItem = publishedSnapshot.Media?.GetById(preview, mediaId);
+            IPublishedContent? mediaItem = _publishedContentCache.GetById(preview, mediaId);
 
             if (mediaItem != null)
             {

@@ -1,30 +1,30 @@
 using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors;
-using Umbraco.Cms.Core.Services;
 
 namespace Umbraco.Community.Hotspots.PropertyEditors;
 
 /// <summary>
 ///     Represents a hotspot property editor.
 /// </summary>
+//[DataEditor(
+//    PropertyEditorAlias,
+//    "Hotspot",
+//    "/App_Plugins/Umbraco.Community.Hotspots/hotspot.html",
+//    ValueType = ValueTypes.Json,
+//    HideLabel = false,
+//    Group = Constants.PropertyEditors.Groups.Media,
+//    Icon = "icon-crosshair",
+//    ValueEditorIsReusable = true)]
 [DataEditor(
     PropertyEditorAlias,
-    "Hotspot",
-    "/App_Plugins/Umbraco.Community.Hotspots/hotspot.html",
     ValueType = ValueTypes.Json,
-    HideLabel = false,
-    Group = Constants.PropertyEditors.Groups.Media,
-    Icon = "icon-crosshair",
     ValueEditorIsReusable = true)]
 public class HotspotPropertyEditor : DataEditor
 {
-
     public const string PropertyEditorAlias = "Umbraco.Community.Hotspot";
 
-    private readonly IEditorConfigurationParser _editorConfigurationParser;
     private readonly IIOHelper _ioHelper;
     private readonly ILogger<HotspotPropertyEditor> _logger;
 
@@ -34,12 +34,10 @@ public class HotspotPropertyEditor : DataEditor
     public HotspotPropertyEditor(
         IDataValueEditorFactory dataValueEditorFactory,
         ILoggerFactory loggerFactory,
-        IIOHelper ioHelper,
-        IEditorConfigurationParser editorConfigurationParser)
+        IIOHelper ioHelper)
         : base(dataValueEditorFactory)
     {
         _ioHelper = ioHelper ?? throw new ArgumentNullException(nameof(ioHelper));
-        _editorConfigurationParser = editorConfigurationParser;
         _logger = loggerFactory.CreateLogger<HotspotPropertyEditor>();
         SupportsReadOnly = true;
     }
@@ -58,5 +56,5 @@ public class HotspotPropertyEditor : DataEditor
     /// </summary>
     /// <returns>The corresponding preValue editor.</returns>
     protected override IConfigurationEditor CreateConfigurationEditor() =>
-        new HotspotConfigurationEditor(_ioHelper, _editorConfigurationParser);
+        new HotspotConfigurationEditor(_ioHelper);
 }

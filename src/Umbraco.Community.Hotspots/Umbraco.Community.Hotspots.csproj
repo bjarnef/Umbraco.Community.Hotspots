@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <StaticWebAssetBasePath>App_Plugins</StaticWebAssetBasePath>
@@ -14,7 +14,7 @@
     <RootNamespace>Umbraco.Community.Hotspots</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     
-    <Version>1.0.0</Version>
+    <Version>2.0.0</Version>
     <Authors>Bjarne Fyrstenborg</Authors>
     <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Bjarne Fyrstenborg</Copyright>
     
@@ -28,8 +28,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0, 14.0.0)" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[13.0.0, 14.0.0)" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[16.0.0, 18.0.0)" />
   </ItemGroup>
 
   <ItemGroup>

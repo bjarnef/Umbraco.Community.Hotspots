@@ -8,22 +8,18 @@ namespace Umbraco.Community.Hotspots.PropertyEditors;
 /// </summary>
 public class HotspotConfiguration
 {
-    [ConfigurationField("source", "Image", "/App_Plugins/Umbraco.Community.Hotspots/source-image.html", Description = "Choose the source image to select a hotspot.")]
+    [ConfigurationField("source")] // "Image", "/App_Plugins/Umbraco.Community.Hotspots/source-image.html", Description = "Choose the source image to select a hotspot.")]
     public SourceImage? Source { get; set; }
 
-    [ConfigurationField("hideHotspot", "Hide hotspot", "boolean", Description = "Hide hotspot initially.")]
+    [ConfigurationField("hideHotspot")] // "Hide hotspot", "boolean", Description = "Hide hotspot initially.")]
     public bool HideHotspot { get; set; }
 
-    [DataContract]
     public class SourceImage
     {
-        [DataMember(Name = "type")]
         public string Type { get; set; } = null!;
 
-        [DataMember(Name = "mediaKey")]
         public Guid? MediaKey { get; set; }
 
-        [DataMember(Name = "src")]
         public string? Src { get; set; }
     }
 }
