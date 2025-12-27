@@ -1,0 +1,14 @@
+{
+  "id": "Umbraco.Community.Hotspots",
+  "name": "Umbraco.Community.Hotspots",
+  "version": "0.0.0",
+  "allowTelemetry": true,
+  "extensions": [
+    {
+      "name": "Umbraco Community Hotspots Bundle",
+      "alias": "Umbraco.Community.Hotspots.Bundle",
+      "type": "bundle",
+      "js": "/App_Plugins/UmbracoCommunityHotspots/umbraco-community-hotspots.js"
+    }
+  ]
+}

@@ -11,7 +11,7 @@ public class HotspotConfiguration
     [ConfigurationField("source")] // "Image", "/App_Plugins/Umbraco.Community.Hotspots/source-image.html", Description = "Choose the source image to select a hotspot.")]
     public SourceImage? Source { get; set; }
 
-    [ConfigurationField("hideHotspot")] // "Hide hotspot", "boolean", Description = "Hide hotspot initially.")]
+    [ConfigurationField("hideHotspot")]
     public bool HideHotspot { get; set; }
 
     public class SourceImage
