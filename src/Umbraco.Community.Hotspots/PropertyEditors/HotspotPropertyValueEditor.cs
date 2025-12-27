@@ -1,19 +1,14 @@
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Cache;
-using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Editors;
-using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
-using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
 using Umbraco.Cms.Core.Serialization;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Strings;
-using Umbraco.Cms.Infrastructure.PublishedCache;
 using Umbraco.Community.Hotspots.Converters;
 using Umbraco.Community.Hotspots.Extensions;
 using Umbraco.Extensions;
@@ -26,7 +21,6 @@ namespace Umbraco.Community.Hotspots.PropertyEditors;
 internal class HotspotPropertyValueEditor : DataValueEditor
 {
     private readonly IDataTypeConfigurationCache _dataTypeConfigurationCache;
-    private readonly IDataTypeService _dataTypeService;
     private readonly IMediaService _mediaService;
     private readonly IJsonSerializer _jsonSerializer;
     private readonly ILogger<HotspotPropertyValueEditor> _logger;
@@ -37,13 +31,11 @@ internal class HotspotPropertyValueEditor : DataValueEditor
         IShortStringHelper shortStringHelper,
         IJsonSerializer jsonSerializer,
         IIOHelper ioHelper,
-        IDataTypeService dataTypeService,
         IMediaService mediaService,
         IDataTypeConfigurationCache dataTypeConfigurationCache)
         : base(shortStringHelper, jsonSerializer, ioHelper, attribute)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _dataTypeService = dataTypeService;
         _jsonSerializer = jsonSerializer;
         _mediaService = mediaService;
         _dataTypeConfigurationCache = dataTypeConfigurationCache;

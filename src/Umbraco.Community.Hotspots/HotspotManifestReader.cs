@@ -37,14 +37,15 @@ namespace Umbraco.Community.Hotspots
             var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
             var version = $"{versionInfo.FileMajorPart}.{versionInfo.FileMinorPart}.{versionInfo.FileBuildPart}";
 
-            var manifest = (IEnumerable<PackageManifest>)new List<PackageManifest>() {
+            var manifest = (IEnumerable<PackageManifest>)
+            [
                 new PackageManifest()
                 {
                     AllowTelemetry = true,
                     Version = version,
                     Name = versionInfo.ProductName ?? versionInfo.FileName,
-                    Extensions = new object[]
-                    {
+                    Extensions =
+                    [
                         new
                         {
                             Name = "Hotspot Bundle",
@@ -52,10 +53,10 @@ namespace Umbraco.Community.Hotspots
                             Type = "bundle",
                             Js = "/App_Plugins/Umbraco.Community.Hotspots/hotspots.js"
                         }
-                    }
+                    ]
 
                 }
-            };
+            ];
 
             return Task.FromResult(manifest);
         }
