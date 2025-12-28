@@ -1,23 +1,26 @@
+import { UMBRACO_COMMUNITY_HOTSPOTS_PROPERTY_EDITOR_UI_ALIAS } from './constants.js';
+
 export const manifests: Array<UmbExtensionManifest> = [
   {
     type: "propertyEditorUi",
-    alias: "Umbraco.Community.Hotspots.PropertyEditorUi.Hotspot",
+    alias: UMBRACO_COMMUNITY_HOTSPOTS_PROPERTY_EDITOR_UI_ALIAS,
     name: "Hotspot Property Editor UI",
-    elementName: "hotspot",
+    elementName: "hotspot-property-editor-ui",
     js: () => import("./hotspot.element.js"),
     meta: {
       group: "media",
       icon: "icon-crosshair",
       label: "Hotspot",
       supportsReadOnly: true,
-      propertyEditorSchemaAlias: "Umbraco.Community.Hotspot", //"Umbraco.Plain.Json"
+      propertyEditorSchemaAlias: "Umbraco.Plain.Json", // "Umbraco.Community.Hotspot"
       settings: {
         properties: [
           {
             alias: "source",
             label: "Image",
             description: "Choose the source image to select a hotspot.",
-            propertyEditorUiAlias: "Umbraco.Community.Hotspots.PropertyEditorUi.SourceImage"
+            propertyEditorUiAlias: "Umb.PropertyEditorUi.Toggle"
+            //propertyEditorUiAlias: "Umbraco.Community.Hotspots.PropertyEditorUi.SourceImage"
           },
           {
             alias: "hideHotspot",
@@ -35,7 +38,7 @@ export const manifests: Array<UmbExtensionManifest> = [
       }
     }
   },
-  {
+  /*{
     type: "propertyEditorUi",
     alias: "Umbraco.Community.Hotspots.PropertyEditorUi.SourceImage",
     name: "Source Image Property Editor UI",
@@ -46,5 +49,5 @@ export const manifests: Array<UmbExtensionManifest> = [
       group: "common",
       propertyEditorSchemaAlias: "Umbraco.Plain.Json"
     }
-  }
+  }*/
 ];

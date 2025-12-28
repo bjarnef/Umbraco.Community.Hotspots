@@ -1,4 +1,4 @@
-import { customElement, html, css, property, state, when } from "@umbraco-cms/backoffice/external/lit";
+import { html, property } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import type { UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/property-editor';
 import type { UUIBooleanInputEvent } from '@umbraco-cms/backoffice/external/uui';
@@ -25,7 +25,7 @@ export default class SourceImageElement extends UmbLitElement implements UmbProp
    @property({ type: Boolean })
    readonly?: boolean;
 
-  #onInput(e: UUIBooleanInputEvent) {
+  #onInput(_e: UUIBooleanInputEvent) {
     //this.value.type = e.target.value;
     this.dispatchEvent(new UmbChangeEvent());
   }

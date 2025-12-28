@@ -1,4 +1,4 @@
-import type { UmbFocalPointModel } from '@umbraco-cms/backoffice/property-editor';
+import type { UmbFocalPointModel } from '@umbraco-cms/backoffice/media';
 
 export type HotspotPropertyEditorValue = {
   focalPoint: UmbFocalPointModel;

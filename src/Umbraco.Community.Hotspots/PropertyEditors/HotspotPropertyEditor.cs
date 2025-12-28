@@ -8,15 +8,6 @@ namespace Umbraco.Community.Hotspots.PropertyEditors;
 /// <summary>
 ///     Represents a hotspot property editor.
 /// </summary>
-//[DataEditor(
-//    PropertyEditorAlias,
-//    "Hotspot",
-//    "/App_Plugins/Umbraco.Community.Hotspots/hotspot.html",
-//    ValueType = ValueTypes.Json,
-//    HideLabel = false,
-//    Group = Constants.PropertyEditors.Groups.Media,
-//    Icon = "icon-crosshair",
-//    ValueEditorIsReusable = true)]
 [DataEditor(
     PropertyEditorAlias,
     ValueType = ValueTypes.Json,

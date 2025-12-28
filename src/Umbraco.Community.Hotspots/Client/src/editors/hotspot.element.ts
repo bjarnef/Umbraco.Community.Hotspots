@@ -1,20 +1,22 @@
 import { customElement, html, css, property, state, when } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
-import { UmbPropertyValueChangeEvent } from "@umbraco-cms/backoffice/property-editor";
+//import { UmbPropertyValueChangeEvent } from "@umbraco-cms/backoffice/property-editor";
+import { UmbFocalPointChangeEvent } from '@umbraco-cms/backoffice/media';
+import type { UmbImageCropperFocalPoint } from '@umbraco-cms/backoffice/media';
 import type { UmbPropertyEditorConfigCollection, UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/property-editor';
 import { UMB_DOCUMENT_WORKSPACE_CONTEXT, UmbDocumentWorkspaceContext } from "@umbraco-cms/backoffice/document";
-import { UmbDocumentDetailRepository } from "@umbraco-cms/backoffice/document";
-import { UmbDocumentItemRepository } from "@umbraco-cms/backoffice/document";
-import { UmbMediaDetailRepository } from "@umbraco-cms/backoffice/media";
-import { UmbEntityUnique } from "@umbraco-cms/backoffice/entity";
-import { UmbElementDetailModel } from "@umbraco-cms/backoffice/content";
-import { UmbImagingRepository } from "@umbraco-cms/backoffice/imaging";
+//import { UmbDocumentDetailRepository } from "@umbraco-cms/backoffice/document";
+//import { UmbDocumentItemRepository } from "@umbraco-cms/backoffice/document";
+//import { UmbMediaDetailRepository } from "@umbraco-cms/backoffice/media";
+//import { UmbEntityUnique } from "@umbraco-cms/backoffice/entity";
+//import { UmbElementDetailModel } from "@umbraco-cms/backoffice/content";
+//import { UmbImagingRepository } from "@umbraco-cms/backoffice/imaging";
 import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
 import { UMB_SERVER_CONTEXT } from '@umbraco-cms/backoffice/server';
 import type { HotspotPropertyEditorValue } from './types.js';
 
-@customElement("hotspot")
-export class HotspotElement extends UmbLitElement implements UmbPropertyEditorUiElement {
+@customElement("hotspot-property-editor-ui")
+export class HotspotPropertyEditorUiElement extends UmbLitElement implements UmbPropertyEditorUiElement {
 
   /*static properties = {
     value: { type: Object },
@@ -30,7 +32,7 @@ export class HotspotElement extends UmbLitElement implements UmbPropertyEditorUi
     } else {
       // TODO: This is a temporary solution to make sure we have a focal point
       this.focalPoint = value.focalPoint || { left: 0.5, top: 0.5 };
-      this.src = value.src;
+      this.src = value.src || undefined;
       this.#value = value;
     }
 
@@ -60,22 +62,21 @@ export class HotspotElement extends UmbLitElement implements UmbPropertyEditorUi
   };
 
   #documentWorkspaceContext?: UmbDocumentWorkspaceContext;
-  #documentDetailRepository = new UmbDocumentDetailRepository(this);
-  #documentItemRepository = new UmbDocumentItemRepository(this);
-  #mediaDetailRepository = new UmbMediaDetailRepository(this);
-  #imagingRepository = new UmbImagingRepository(this);
-
+  //#documentDetailRepository = new UmbDocumentDetailRepository(this);
+  //#documentItemRepository = new UmbDocumentItemRepository(this);
+  //#mediaDetailRepository = new UmbMediaDetailRepository(this);
+  //#imagingRepository = new UmbImagingRepository(this);
 
   async #setConfig() {
     if (this._config && this.#documentWorkspaceContext) {
 
-      const imagePropertyAlias = this._config.getValueByAlias("imageSrc")?.toString();
+      //const imagePropertyAlias = this._config.getValueByAlias("imageSrc")?.toString();
       
 
     }
   }
 
-  #getPropertyValue(alias: string, item: UmbElementDetailModel | undefined): any {
+  /*#getPropertyValue(alias: string, item: UmbElementDetailModel | undefined): any {
     if (!item) {
       return null;
     }
@@ -85,7 +86,7 @@ export class HotspotElement extends UmbLitElement implements UmbPropertyEditorUi
       return value.value;
     }
     return null;
-  }
+  }*/
 
   connectedCallback() {
     super.connectedCallback();
@@ -169,11 +170,11 @@ export class HotspotElement extends UmbLitElement implements UmbPropertyEditorUi
    `;
 }
 
-export default HotspotElement;
+export default HotspotPropertyEditorUiElement;
 
 
 declare global {
   interface HTMLElementTagNameMap {
-    'hotspot': HotspotElement;
+    'hotspot-property-editor-ui': HotspotPropertyEditorUiElement;
   }
 }

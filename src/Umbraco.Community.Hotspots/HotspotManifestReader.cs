@@ -48,10 +48,10 @@ namespace Umbraco.Community.Hotspots
                     [
                         new
                         {
-                            Name = "Hotspot Bundle",
-                            Alias = "Hotspot.Bundle",
+                            Name = "Umbraco Community Hotspots Bundle",
+                            Alias = "Umbraco.Community.Hotspots.Bundle",
                             Type = "bundle",
-                            Js = "/App_Plugins/Umbraco.Community.Hotspots/hotspots.js"
+                            Js = "/App_Plugins/Umbraco.Community.Hotspots/umbraco-community-hotspots.js"
                         }
                     ]
 
