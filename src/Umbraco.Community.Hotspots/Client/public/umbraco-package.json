@@ -1,6 +1,6 @@
 {
   "id": "Umbraco.Community.Hotspots",
-  "name": "Umbraco.Community.Hotspots",
+  "name": "Umbraco Community Hotspots",
   "version": "2.0.0",
   "allowTelemetry": true,
   "extensions": [

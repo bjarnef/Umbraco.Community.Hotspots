@@ -3,7 +3,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StaticWebAssetBasePath>App_Plugins</StaticWebAssetBasePath>
+    <StaticWebAssetBasePath>/</StaticWebAssetBasePath>
     <ContentTargetFolders>.</ContentTargetFolders>
     <Product>Umbraco.Community.Hotspots</Product>
     <PackageId>Umbraco.Community.Hotspots</PackageId>
@@ -31,6 +31,14 @@
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="[16.0.0, 18.0.0)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Dont include the client folder as part of packaging nuget build -->
+    <Content Remove="Client\**" />
+
+    <!-- However make the Umbraco-package.json included for dotnet pack or nuget package and visible to the solution -->
+    <None Include="Client\public\umbraco-package.json" Pack="false" />
+  </ItemGroup>
+  
   <ItemGroup>
     <None Include="..\..\assets\icon.png">
       <Pack>True</Pack>

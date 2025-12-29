@@ -13,7 +13,7 @@ import { UMB_DOCUMENT_WORKSPACE_CONTEXT, UmbDocumentWorkspaceContext } from "@um
 //import { UmbImagingRepository } from "@umbraco-cms/backoffice/imaging";
 import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
 import { UMB_SERVER_CONTEXT } from '@umbraco-cms/backoffice/server';
-import type { HotspotPropertyEditorValue } from './types.js';
+import type { HotspotPropertyEditorValue } from '../types.js';
 
 @customElement("hotspot-property-editor-ui")
 export class HotspotPropertyEditorUiElement extends UmbLitElement implements UmbPropertyEditorUiElement {
