@@ -22,6 +22,9 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
     if (!value) {
       this.#value = undefined;
     } else {
+      this._type = value.type;
+      this.mediaId = value.mediaId || undefined;
+      this.src = value.src || undefined;
       this.#value = value;
     }
 
@@ -42,7 +45,13 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
   readonly = false;
 
   @state()
-  _type: 'media' | 'staticAsset' = 'media';
+  private _type: 'media' | 'staticAsset' = 'media';
+
+  @state()
+  private src?: string;
+
+  @state()
+  private mediaId?: string;
 
   @state()
   private _editMediaPath = '';
@@ -74,7 +83,8 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
 
     this.observe(this.#pickerInputContext.selection, (selection) => {
       if (this.value) {
-        this.value.mediaId = selection[0];
+        this.mediaId = selection[0];
+        this.#updateValue();
       }
     });
 
@@ -107,12 +117,19 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
       (mediaTypes?.items.map((x) => x.unique).filter((x) => x && !isUmbracoFolder(x)) as Array<string>) ?? [];
   }
 
+  #updateValue() {
+    this.#value = {
+      type: this._type,
+      mediaId: this.mediaId || null,
+      src: this.src,
+    };
+
+    this.dispatchEvent(new UmbChangeEvent());
+  }
+
   #onInput(e: UUIBooleanInputEvent) {
     this._type = e.target.value === "staticAsset" ? "staticAsset" : "media";
-
-    this.value = this.value || { mediaId: null, src: null, type: this._type };
-    this.value.type = this._type;
-    this.dispatchEvent(new UmbChangeEvent());
+    this.#updateValue();
   }
 
   #openMediaPicker() {
@@ -161,6 +178,7 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
               </div>`,
           )}
         </div>
+        <pre>${JSON.stringify(this.value, null, 2)}</pre>
       </div>
      `;
   }

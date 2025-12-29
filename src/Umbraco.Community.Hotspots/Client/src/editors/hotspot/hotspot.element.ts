@@ -52,7 +52,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   @state()
   focalPoint: UmbImageCropperFocalPoint = { left: 0.5, top: 0.5 };
 
-  @property({ type: Boolean })
+  @state()
   hideFocalPoint = false;
 
   @property({ attribute: false })
@@ -69,10 +69,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
   async #setConfig() {
     if (this._config && this.#documentWorkspaceContext) {
-
-      //const imagePropertyAlias = this._config.getValueByAlias("imageSrc")?.toString();
-      
-
+      this.hideFocalPoint = this._config?.getValueByAlias<boolean>('hideHotspot') ?? false;
     }
   }
 
@@ -139,7 +136,13 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     this.#updateValue();
   };
 
-  render() {
+  override render() {
+    return html`
+			<div id="main">${this.renderMain()}</div>
+		`;
+  }
+
+  protected renderMain() {
     return html`
       <umb-image-cropper-focus-setter
 				.focalPoint=${this.focalPoint}
@@ -167,6 +170,43 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   }
 
   static styles = css`
+    :host {
+		  display: flex;
+		  width: 100%;
+		  box-sizing: border-box;
+		  gap: var(--uui-size-space-3);
+		  height: 400px;
+	  }
+
+    #main {
+			max-width: 500px;
+			min-width: 300px;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			gap: var(--uui-size-space-1);
+			flex-direction: column;
+		}
+
+		#actions {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 0.5rem;
+
+			uui-icon {
+				padding-right: var(--uui-size-1);
+			}
+		}
+
+		slot[name='actions'] {
+			display: block;
+			flex: 1;
+		}
+
+    umb-image-cropper-focus-setter {
+			height: calc(100% - 33px - 0.5rem - var(--uui-size-space-1)); /* Temp solution to make room for actions */
+		}
+
    `;
 }
 
