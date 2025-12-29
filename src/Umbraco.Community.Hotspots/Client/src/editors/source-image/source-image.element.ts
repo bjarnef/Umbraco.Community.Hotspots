@@ -6,6 +6,8 @@ import type { UUIBooleanInputEvent } from '@umbraco-cms/backoffice/external/uui'
 import { UMB_WORKSPACE_MODAL } from '@umbraco-cms/backoffice/workspace';
 import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
 import { UmbStaticFilePickerInputContext } from '@umbraco-cms/backoffice/static-file';
+import { isUmbracoFolder, UmbMediaTypeStructureRepository } from '@umbraco-cms/backoffice/media-type';
+import { UMB_MEDIA_TYPE_ENTITY_TYPE } from '@umbraco-cms/backoffice/media-type';
 import { UmbMediaPickerInputContext } from '@umbraco-cms/backoffice/media';
 import type { UmbMediaCardItemModel } from '@umbraco-cms/backoffice/media';
 import type { SourceImagePropertyEditorValue } from '../types.js';
@@ -48,11 +50,16 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
   @state()
   private _cards: Array<UmbMediaCardItemModel> = [];
 
-  #pickerInputContext = new UmbMediaPickerInputContext(this);
+  @state()
+  private _allowedMediaTypeUniques?: Array<string>;
+
   #pickerFileInputContext = new UmbStaticFilePickerInputContext(this);
+  #pickerInputContext = new UmbMediaPickerInputContext(this);
 
   constructor() {
     super();
+
+    console.log("value", this.value);
 
     new UmbModalRouteRegistrationController(this, UMB_WORKSPACE_MODAL)
       .addAdditionalPath('media')
@@ -62,6 +69,8 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
       .observeRouteBuilder((routeBuilder) => {
         this._editMediaPath = routeBuilder({});
       });
+
+    this.#getMediaTypes();
 
     this.observe(this.#pickerInputContext.selection, (selection) => {
       if (this.value) {
@@ -90,9 +99,19 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
     });*/
   }
 
+  async #getMediaTypes() {
+    // Get all the media types, excluding the folders, so that files are selectable media items.
+    const mediaTypeStructureRepository = new UmbMediaTypeStructureRepository(this);
+    const { data: mediaTypes } = await mediaTypeStructureRepository.requestAllowedChildrenOf(null, null);
+    this._allowedMediaTypeUniques =
+      (mediaTypes?.items.map((x) => x.unique).filter((x) => x && !isUmbracoFolder(x)) as Array<string>) ?? [];
+  }
+
   #onInput(e: UUIBooleanInputEvent) {
     this._type = e.target.value === "staticAsset" ? "staticAsset" : "media";
-    //this.value = { type: this._type };
+
+    this.value = this.value || { mediaId: null, src: null, type: this._type };
+    this.value.type = this._type;
     this.dispatchEvent(new UmbChangeEvent());
   }
 
@@ -103,10 +122,10 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
         //startNode: this.startNode,
       },
       {
-        /*allowedContentTypes: this.allowedContentTypeIds?.map((id) => ({
+        allowedContentTypes: this._allowedMediaTypeUniques?.map((id) => ({
           unique: id,
           entityType: UMB_MEDIA_TYPE_ENTITY_TYPE,
-        })),*/
+        })),
         includeTrashed: false,
       },
     );
@@ -128,7 +147,7 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
   }
 
   override render() {
-    return html`<div>Test
+    return html`<div>
         ${this.#renderOptions()}
         <div>
           ${when(
@@ -206,7 +225,11 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
 				id="btn-add"
 				look="placeholder"
 				@click=${this.#openStaticFilePicker}
-				label=${this.localize.term('general_choose')}></uui-button>
+				label=${this.localize.term('general_choose')}
+        ?disabled=${this.readonly}>
+        <uui-icon name="icon-add"></uui-icon>
+        ${this.localize.term('general_choose')}
+      </uui-button>
 		`;
   }
 
