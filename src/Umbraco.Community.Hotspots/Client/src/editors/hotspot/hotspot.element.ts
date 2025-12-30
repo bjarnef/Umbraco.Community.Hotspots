@@ -10,10 +10,11 @@ import { UMB_DOCUMENT_WORKSPACE_CONTEXT, UmbDocumentWorkspaceContext } from "@um
 //import { UmbMediaDetailRepository } from "@umbraco-cms/backoffice/media";
 //import { UmbEntityUnique } from "@umbraco-cms/backoffice/entity";
 //import { UmbElementDetailModel } from "@umbraco-cms/backoffice/content";
-//import { UmbImagingRepository } from "@umbraco-cms/backoffice/imaging";
+import { ImageCropModeModel } from '@umbraco-cms/backoffice/external/backend-api';
+import { UmbImagingRepository } from "@umbraco-cms/backoffice/imaging";
 import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
 import { UMB_SERVER_CONTEXT } from '@umbraco-cms/backoffice/server';
-import type { HotspotPropertyEditorValue } from '../types.js';
+import type { HotspotPropertyEditorValue, SourceImageType } from '../types.js';
 
 @customElement("hotspot-property-editor-ui")
 export class HotspotPropertyEditorUiElement extends UmbLitElement implements UmbPropertyEditorUiElement {
@@ -47,7 +48,16 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   private _config?: UmbPropertyEditorConfigCollection;
 
   @state()
+  private type?: SourceImageType;
+
+  @state()
   private src?: string;
+
+  @state()
+  private mediaId?: string;
+
+  @state()
+  private _imgSrc?: string;
 
   @state()
   focalPoint: UmbImageCropperFocalPoint = { left: 0.5, top: 0.5 };
@@ -65,12 +75,51 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   //#documentDetailRepository = new UmbDocumentDetailRepository(this);
   //#documentItemRepository = new UmbDocumentItemRepository(this);
   //#mediaDetailRepository = new UmbMediaDetailRepository(this);
-  //#imagingRepository = new UmbImagingRepository(this);
+  #imagingRepository = new UmbImagingRepository(this);
 
   async #setConfig() {
     if (this._config && this.#documentWorkspaceContext) {
       this.hideFocalPoint = this._config?.getValueByAlias<boolean>('hideHotspot') ?? false;
+
+      const source = this._config?.getValueByAlias<any>('source');
+      if (source) {
+        this.type = source.type === "staticAsset" ? "staticAsset" : "media";
+        this.src = source.src?.replace(/^~/, '') || undefined;
+        this.mediaId = source.mediaId || undefined;
+      }
     }
+  }
+
+  async #retrieveMedia() {
+
+    /*if (this.type === 'staticAsset') {
+      this.src.replace(/^~/, "");;
+
+      return;
+    }*/
+
+    const mediaUnique = this.mediaId || null;
+
+    console.log("retrieveMedia", mediaUnique);
+
+    if (!mediaUnique) {
+      return;
+    }
+
+    const maxImageSize = 2000;
+
+    // Get the resized image URL 
+    const { data } = await this.#imagingRepository.requestResizedItems([mediaUnique], {
+      width: maxImageSize,
+      height: maxImageSize,
+      mode: ImageCropModeModel.MAX,
+    });
+
+    console.log("Media image data", data);
+
+    if (!data || data.length === 0) return;
+
+    this._imgSrc = data[0].url;
   }
 
   /*#getPropertyValue(alias: string, item: UmbElementDetailModel | undefined): any {
@@ -90,6 +139,10 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     this.consumeContext(UMB_DOCUMENT_WORKSPACE_CONTEXT, (context) => {
       this.#documentWorkspaceContext = context;
       this.#setConfig();
+
+      if (this.type === "media") {
+        this.#retrieveMedia();
+      }
     });
   }
 
@@ -98,6 +151,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
   get source(): string {
     if (this.src) {
+      console.log("Hotspot Property Editor UI - source:", this.src);
       // Test that URL is relative:
       if (this.src.startsWith('/')) {
         return `${this._serverUrl}${this.src}`;
@@ -146,7 +200,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     return html`
       <umb-image-cropper-focus-setter
 				.focalPoint=${this.focalPoint}
-				.src=${this.source}
+				.src=${this._imgSrc ?? this.source}
 				?hideFocalPoint=${this.hideFocalPoint}
 				@focalpoint-change=${this.#onFocalPointChange}>
 			</umb-image-cropper-focus-setter>

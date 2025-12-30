@@ -1,5 +1,7 @@
 import type { UmbFocalPointModel } from '@umbraco-cms/backoffice/media';
 
+export type SourceImageType = 'media' | 'staticAsset';
+
 export type HotspotPropertyEditorValue = {
   focalPoint: UmbFocalPointModel;
   src: string | null | undefined;
@@ -7,7 +9,7 @@ export type HotspotPropertyEditorValue = {
 };
 
 export type SourceImagePropertyEditorValue = {
-  type: 'media' | 'staticAsset';
+  type: SourceImageType;
   src?: string | null;
   mediaId?: string | null;
 };
