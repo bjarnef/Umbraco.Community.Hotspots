@@ -11,5 +11,5 @@ export type HotspotPropertyEditorValue = {
 export type SourceImagePropertyEditorValue = {
   type: SourceImageType;
   src?: string | null;
-  mediaId?: string | null;
+  mediaKey?: string | null;
 };
