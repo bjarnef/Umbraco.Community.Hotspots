@@ -35,7 +35,7 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
       this.#value = undefined;
     } else {
       this._type = value.type;
-      this.mediaId = value.mediaId || undefined;
+      this.mediaKey = value.mediaKey || undefined;
       this.src = value.src || undefined;
       this.#value = value;
     }
@@ -63,7 +63,7 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
   private src?: string;
 
   @state()
-  private mediaId?: string;
+  private mediaKey?: string;
 
   @state()
   private _editMediaPath = '';
@@ -147,9 +147,9 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
     this._cards =
       media ? [media] : [];*/
 
-    if (!this.mediaId) return;
+    if (!this.mediaKey) return;
 
-    const { data: image } = await this.#mediaRepository.requestByUnique(this.mediaId)
+    const { data: image } = await this.#mediaRepository.requestByUnique(this.mediaKey)
     console.log(image);
 
     const card: UmbMediaCardItemModel = {
@@ -174,7 +174,7 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
   #updateValue() {
     this.#value = {
       type: this._type,
-      mediaId: this.mediaId || null,
+      mediaKey: this.mediaKey || null,
       src: this.src,
     };
 
@@ -204,9 +204,9 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
       .then((value) => {
         /**/
         if (value.selection && value.selection.length > 0) {
-          this.mediaId = value.selection[0] || undefined;
+          this.mediaKey = value.selection[0] || undefined;
 
-          if (this.mediaId) {
+          if (this.mediaKey) {
             this.#populateCards();
           }
 
@@ -276,7 +276,7 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
 
           console.log("SRC", src);
 
-          this.mediaId = undefined;
+          this.mediaKey = undefined;
           this.src = src;
           this.#updateValue();
         }
