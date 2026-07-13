@@ -1,4 +1,4 @@
-import { customElement, html, css, property, state, when } from "@umbraco-cms/backoffice/external/lit";
+import { customElement, html, css, property, query, state, when } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 //import { UmbPropertyValueChangeEvent } from "@umbraco-cms/backoffice/property-editor";
 import { UmbFocalPointChangeEvent } from '@umbraco-cms/backoffice/media';
@@ -24,16 +24,19 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     config: { type: Object },
   }*/
 
+  @query('#focal-point') focalPointElement!: HTMLElement;
+
   @property({ attribute: false })
   set value(value) {
     if (!value) {
       this.focalPoint = { left: 0.5, top: 0.5 };
       this.src = '';
+      this.mediaId = undefined;
       this.#value = undefined;
     } else {
-      // TODO: This is a temporary solution to make sure we have a focal point
       this.focalPoint = value.focalPoint || { left: 0.5, top: 0.5 };
       this.src = value.src || undefined;
+      this.mediaId = value.mediaId || undefined;
       this.#value = value;
     }
 
@@ -60,10 +63,10 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   private _imgSrc?: string;
 
   @state()
-  focalPoint: UmbImageCropperFocalPoint = { left: 0.5, top: 0.5 };
+  focalPoint: UmbImageCropperFocalPoint | null = { left: 0.5, top: 0.5 };
 
   @state()
-  hideFocalPoint = false;
+  hideHotspot = false;
 
   @property({ attribute: false })
   public set config(config: UmbPropertyEditorConfigCollection) {
@@ -79,7 +82,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
   async #setConfig() {
     if (this._config && this.#documentWorkspaceContext) {
-      this.hideFocalPoint = this._config?.getValueByAlias<boolean>('hideHotspot') ?? false;
+      this.hideHotspot = this._config?.getValueByAlias<boolean>('hideHotspot') ?? false;
 
       const source = this._config?.getValueByAlias<any>('source');
       if (source) {
@@ -185,6 +188,15 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     this.dispatchEvent(new UmbChangeEvent());
   }
 
+  protected onClearFocalPoint = async () => {
+    this.focalPoint = null;
+
+    await this.updateComplete;
+    console.log("Focal point 1", this.focalPointElement);
+    console.log("Focal point 2", this.shadowRoot?.getElementById("focal-point") as HTMLElement);
+    this.#updateValue();
+  };
+
   protected onResetFocalPoint = () => {
     this.focalPoint = { left: 0.5, top: 0.5 };
     this.#updateValue();
@@ -198,10 +210,11 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
   protected renderMain() {
     return html`
+    Value: ${JSON.stringify(this.value)}<br>
+    Hide Hotspot: ${this.hideHotspot}<br>
       <umb-image-cropper-focus-setter
 				.focalPoint=${this.focalPoint}
 				.src=${this._imgSrc ?? this.source}
-				?hideFocalPoint=${this.hideFocalPoint}
 				@focalpoint-change=${this.#onFocalPointChange}>
 			</umb-image-cropper-focus-setter>
       <div id="actions">${this.renderActions()}</div>
@@ -210,16 +223,24 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
   protected renderActions() {
     return html`
-			<slot name="actions"></slot>
+      ${when(
+        !this.hideHotspot && this.value?.focalPoint,
+        () => html`
+          <uui-button compact label=${this.localize.term('content_clearFocalPoint')} @click=${this.onClearFocalPoint}>
+					  <uui-icon name="icon-remove"></uui-icon>
+					  <umb-localize key="content_clearFocalPoint">Clear focal point</umb-localize>
+				  </uui-button>
+				`,
+      )}
 			${when(
-      !this.hideFocalPoint && this.focalPoint.left !== 0.5 && this.focalPoint.top !== 0.5,
+      !this.hideHotspot && this.focalPoint && this.focalPoint.left !== 0.5 && this.focalPoint.top !== 0.5,
       () => html`
 					<uui-button compact label=${this.localize.term('content_resetFocalPoint')} @click=${this.onResetFocalPoint}>
 						<uui-icon name="icon-axis-rotation"></uui-icon>
-						${this.localize.term('content_resetFocalPoint')}
+						<umb-localize key="content_resetFocalPoint">Reset focal point</umb-localize>
 					</uui-button>
 				`,
-    )}
+      )}
 		`;
   }
 
@@ -252,14 +273,13 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 			}
 		}
 
-		slot[name='actions'] {
-			display: block;
-			flex: 1;
-		}
-
     umb-image-cropper-focus-setter {
 			height: calc(100% - 33px - 0.5rem - var(--uui-size-space-1)); /* Temp solution to make room for actions */
 		}
+
+    #hotspot-hidden #focal-point {
+      display: none;
+    }
 
    `;
 }
