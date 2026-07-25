@@ -11,14 +11,15 @@ namespace Umbraco.Community.Hotspots.Migrations.V_2_0_0
 
         protected override async Task MigrateAsync()
         {
-            var dataTypes = await this.Database.Query<DataTypeDto>()
+            var dataTypes = await Database.Query<DataTypeDto>()
                 .Where(x => x.EditorUiAlias == "Umbraco.Community.Hotspots").ToListAsync();
 
             foreach (var dataType in dataTypes)
             {
-                dataType.EditorUiAlias = "Umbraco.Community.Hotspots.PropertyEditorUi.Hotspot"; // TODO: Check this alias
+                dataType.EditorAlias = "Umbraco.Community.Hotspot";
+                dataType.EditorUiAlias = "Umbraco.Community.Hotspots.PropertyEditorUi.Hotspot";
 
-                await this.Database.UpdateAsync(dataType);
+                await Database.UpdateAsync(dataType);
             }
         }
     }
