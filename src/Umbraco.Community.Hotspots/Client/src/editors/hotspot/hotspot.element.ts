@@ -192,8 +192,6 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     this.focalPoint = null;
 
     await this.updateComplete;
-    console.log("Focal point 1", this.focalPointElement);
-    console.log("Focal point 2", this.shadowRoot?.getElementById("focal-point") as HTMLElement);
     this.#updateValue();
   };
 
@@ -276,10 +274,6 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     umb-image-cropper-focus-setter {
 			height: calc(100% - 33px - 0.5rem - var(--uui-size-space-1)); /* Temp solution to make room for actions */
 		}
-
-    #hotspot-hidden #focal-point {
-      display: none;
-    }
 
    `;
 }
