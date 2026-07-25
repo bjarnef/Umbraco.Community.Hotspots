@@ -14,7 +14,7 @@ import { ImageCropModeModel } from '@umbraco-cms/backoffice/external/backend-api
 import { UmbImagingRepository } from "@umbraco-cms/backoffice/imaging";
 import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
 import { UMB_SERVER_CONTEXT } from '@umbraco-cms/backoffice/server';
-import type { HotspotPropertyEditorValue, SourceImageType } from '../types.js';
+import type { HotspotPropertyEditorValue, SourceImagePropertyEditorValue, SourceImageType } from '../types.js';
 
 @customElement("hotspot-property-editor-ui")
 export class HotspotPropertyEditorUiElement extends UmbLitElement implements UmbPropertyEditorUiElement {
@@ -84,11 +84,13 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     if (this._config && this.#documentWorkspaceContext) {
       this.hideHotspot = this._config?.getValueByAlias<boolean>('hideHotspot') ?? false;
 
-      const source = this._config?.getValueByAlias<any>('source');
+      const source = this._config?.getValueByAlias<SourceImagePropertyEditorValue>('source');
+
+      console.log("source:", source);
       if (source) {
         this.type = source.type === "staticAsset" ? "staticAsset" : "media";
         this.src = source.src?.replace(/^~/, '') || undefined;
-        this.mediaId = source.mediaId || undefined;
+        this.mediaId = source.mediaKey || undefined;
       }
     }
   }
@@ -125,23 +127,13 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     this._imgSrc = data[0].url;
   }
 
-  /*#getPropertyValue(alias: string, item: UmbElementDetailModel | undefined): any {
-    if (!item) {
-      return null;
-    }
-
-    const value = item?.values.find((i) => i.alias === alias);
-    if (value) {
-      return value.value;
-    }
-    return null;
-  }*/
-
   connectedCallback() {
     super.connectedCallback();
     this.consumeContext(UMB_DOCUMENT_WORKSPACE_CONTEXT, (context) => {
       this.#documentWorkspaceContext = context;
       this.#setConfig();
+
+      console.log("Hotspot Property Editor UI - connectedCallback - type:", this.type, "src:", this.src, "mediaId:", this.mediaId);
 
       if (this.type === "media") {
         this.#retrieveMedia();
@@ -181,9 +173,11 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
   #updateValue() {
     this.#value = {
+      ...(this.#value ?? {}),
       focalPoint: this.focalPoint,
+      mediaId: this.mediaId,
       src: this.src,
-    };
+    } as HotspotPropertyEditorValue;
 
     this.dispatchEvent(new UmbChangeEvent());
   }
@@ -222,7 +216,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   protected renderActions() {
     return html`
       ${when(
-        !this.hideHotspot && this.value?.focalPoint,
+        !this.hideHotspot && this.focalPoint,
         () => html`
           <uui-button compact label=${this.localize.term('content_clearFocalPoint')} @click=${this.onClearFocalPoint}>
 					  <uui-icon name="icon-remove"></uui-icon>
