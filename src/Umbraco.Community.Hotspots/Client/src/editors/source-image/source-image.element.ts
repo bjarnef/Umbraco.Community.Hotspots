@@ -8,6 +8,7 @@ import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
 import { isUmbracoFolder, UmbMediaTypeStructureRepository } from '@umbraco-cms/backoffice/media-type';
 import { UMB_MEDIA_TYPE_ENTITY_TYPE } from '@umbraco-cms/backoffice/media-type';
 //import { UmbMediaPickerInputContext } from '@umbraco-cms/backoffice/media';
+import type {  } from '@umbraco-cms/backoffice/media';
 import { UmbMediaDetailRepository } from '@umbraco-cms/backoffice/media';
 import type { UmbMediaCardItemModel } from '@umbraco-cms/backoffice/media';
 import type { SourceImagePropertyEditorValue, SourceImageType } from '../types.js';
@@ -15,6 +16,7 @@ import type { SourceImagePropertyEditorValue, SourceImageType } from '../types.j
 import { UUIRadioElement } from '@umbraco-cms/backoffice/external/uui';
 import type { UUIRadioEvent } from '@umbraco-cms/backoffice/external/uui';
 import type { UmbMediaItemModel } from '@umbraco-cms/backoffice/media';
+import type { UmbImagingResizeModel } from '@umbraco-cms/backoffice/imaging';
 import type { UmbMediaTypeEntityType } from '@umbraco-cms/backoffice/media-type';
 
 import { UMB_MEDIA_PICKER_MODAL } from '@umbraco-cms/backoffice/media';
@@ -23,6 +25,8 @@ import { UMB_STATIC_FILE_PICKER_MODAL, UmbStaticFilePickerModalData } from '@umb
 import {
   UMB_MODAL_MANAGER_CONTEXT
 } from "@umbraco-cms/backoffice/modal";
+import { UMB_SERVER_CONTEXT } from '@umbraco-cms/backoffice/server';
+import { ImageCropModeModel } from "@umbraco-cms/backoffice/external/backend-api";
 
 @customElement("source-image-property-editor-ui")
 export class SourceImagePropertyEditorUiElement extends UmbLitElement implements UmbPropertyEditorUiElement {
@@ -66,6 +70,9 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
   private mediaKey?: string;
 
   @state()
+  private _serverUrl = '';
+
+  @state()
   private _editMediaPath = '';
 
   @state()
@@ -107,6 +114,10 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
     this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, (instance) => {
       this.#modalManagerContext = instance;
       // modalManagerContext is now ready to be used.
+    });
+
+    this.consumeContext(UMB_SERVER_CONTEXT, (context) => {
+      this._serverUrl = context?.getServerUrl() ?? '';
     });
 
     /*this.consumeContext(UMB_PICKER_INPUT_CONTEXT, (pickerInputContext) => {
@@ -202,7 +213,6 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
     modalContext
       ?.onSubmit()
       .then((value) => {
-        /**/
         if (value.selection && value.selection.length > 0) {
           this.mediaKey = value.selection[0] || undefined;
 
@@ -263,18 +273,37 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
         ];*/
         if (value.selection && value.selection.length > 0) {
 
-          if (!value.selection[0]) return;
+          let path = value.selection[0];
+          if (!path) return;
 
-          const path = value.selection[0];
+          console.log("path", path);
 
-          const filenameWithExt = path.substring(path.lastIndexOf('/') + 1);
-          const extension = filenameWithExt.substring(filenameWithExt.lastIndexOf('.') + 1);
-          const filename = filenameWithExt.substring(0, filenameWithExt.lastIndexOf('.'));
-
-          const url = decodeURIComponent(filename.replace(/\+/g, " ")) + `.${extension}`;
-          const src = "~" + url.replace("wwwroot/", "");
+          const decodedPath = decodeURIComponent(path).replace(/%dot%/g, ".");
+          const normalizedPath = decodedPath
+            .replace(/\\/g, "/")
+            .replace(/^\/?wwwroot\//i, "/");
+            
+          const src = `~${normalizedPath.startsWith("/") ? normalizedPath : `/${normalizedPath}`}`;
 
           console.log("SRC", src);
+
+          const card: UmbMediaCardItemModel = {
+            entityType: "media",
+            unique: "",
+            src: src,
+            name: "Test",
+            isTrashed: false,
+            hasChildren: false,
+            parent: null,
+            variants: [],
+            mediaType: {
+              unique: "",
+              icon: "icon-document",
+              collection: null
+            }
+          };
+
+          this._cards = [...this._cards, card];
 
           this.mediaKey = undefined;
           this.src = src;
@@ -291,9 +320,18 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
     */
   }
 
-  async #onRemove(item: UmbMediaCardItemModel) {
+  async #onRemoveMedia(item: UmbMediaCardItemModel) {
     //await this.#pickerInputContext?.requestRemoveItem(item.unique);
     this._cards = this._cards.filter((x) => x.unique !== item.unique);
+    this.mediaKey = undefined;
+    this.src = undefined;
+    this.#updateValue();
+  }
+
+  async #onRemoveImage() {
+    this.mediaKey = undefined;
+    this.src = undefined;
+    this.#updateValue();
   }
 
   override render() {
@@ -303,7 +341,7 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
           ${when(
             this._type === 'staticAsset',
             () => html`<div class="container">
-               ${this.#renderStaticFileAddButton()}
+               ${this.#renderThumbnail(this.#getThumbnailDataFromSrc(this.src))} ${this.#renderStaticFileAddButton()}
               </div>`,
             () =>
               html`<div class="container">
@@ -347,9 +385,59 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
 					alt=${item.name}
 					icon=${item.mediaType.icon}></umb-imaging-thumbnail>
           ${this.#renderIsTrashed(item)}
-				<uui-action-bar slot="actions">${this.#renderRemoveAction(item)}</uui-action-bar>
+				<uui-action-bar slot="actions">${this.#renderRemoveMediaAction(item)}</uui-action-bar>
 			</uui-card-media>
 		`;
+  }
+
+  get source(): string {
+    if (!this.src) return '';
+
+    const normalizedSrc = this.src.startsWith('~/') ? this.src.replace(/^~\//, '/') : this.src;
+    if (normalizedSrc.startsWith('/')) {
+      return `${this._serverUrl}${normalizedSrc}`;
+    }
+
+    return normalizedSrc;
+  }
+
+  #getThumbnailDataFromSrc(src: string | undefined): { src: string | undefined; name: string; extension: string } {
+    if (!src) {
+      return { src: undefined, name: '', extension: '' };
+    }
+
+    const normalizedSrc = src.replace(/\\/g, '/');
+    const fileName = normalizedSrc.split('/').pop() ?? '';
+    const dotIndex = fileName.lastIndexOf('.');
+    const rawName = dotIndex > 0 ? fileName.substring(0, dotIndex) : fileName;
+    const extension = dotIndex > 0 ? fileName.substring(dotIndex + 1).toLowerCase() : '';
+    const name = decodeURIComponent(rawName).replace(/\+/g, ' ');
+
+    const imagingModel: UmbImagingResizeModel = {
+      height: 300,
+      width: 300,
+      mode: ImageCropModeModel.MIN,
+    };
+
+    const queryString = new URLSearchParams({
+      width: imagingModel.width?.toString() ?? '',
+      height: imagingModel.height?.toString() ?? '',
+      rmode: imagingModel.mode?.toLocaleLowerCase() ?? '',
+    });
+
+    return {
+      src: `${this.source}${this.source.includes('?') ? '&' : '?'}${queryString}`,
+      name: name || this.localize.term('general_image'),
+      extension,
+    };
+  }
+
+  #renderThumbnail({ src, name, extension }: { src: string | undefined; name: string; extension: string }) {
+    if (!src) return nothing;
+    return html`<uui-card-media name="${name}" fileext="${extension}"
+      ><img src="${src}" alt="${name}">
+      <uui-action-bar slot="actions">${this.#renderRemoveImageAction()}</uui-action-bar>
+    </uui-card-media>`;
   }
 
   #renderMediaAddButton() {
@@ -372,23 +460,37 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
   }
 
   #renderStaticFileAddButton() {
+    if (this.src?.length) return nothing;
+    if (this.readonly && this.src?.length) {
+      return nothing;
+    } else {
+      return html`
+        <uui-button
+          id="btn-add"
+          look="placeholder"
+          @click=${this.#openStaticFilePicker}
+          label=${this.localize.term('general_choose')}
+          ?disabled=${this.readonly}>
+          <uui-icon name="icon-add"></uui-icon>
+          ${this.localize.term('general_choose')}
+        </uui-button>
+      `;
+    }
+  }
+
+  #renderRemoveImageAction() {
+    if (this.readonly) return nothing;
     return html`
-			<uui-button
-				id="btn-add"
-				look="placeholder"
-				@click=${this.#openStaticFilePicker}
-				label=${this.localize.term('general_choose')}
-        ?disabled=${this.readonly}>
-        <uui-icon name="icon-add"></uui-icon>
-        ${this.localize.term('general_choose')}
-      </uui-button>
+			<uui-button label=${this.localize.term('general_remove')} look="secondary" @click=${() => this.#onRemoveImage()}>
+				<uui-icon name="icon-trash"></uui-icon>
+			</uui-button>
 		`;
   }
 
-  #renderRemoveAction(item: UmbMediaCardItemModel) {
+  #renderRemoveMediaAction(item: UmbMediaCardItemModel) {
     if (this.readonly) return nothing;
     return html`
-			<uui-button label=${this.localize.term('general_remove')} look="secondary" @click=${() => this.#onRemove(item)}>
+			<uui-button label=${this.localize.term('general_remove')} look="secondary" @click=${() => this.#onRemoveMedia(item)}>
 				<uui-icon name="icon-trash"></uui-icon>
 			</uui-button>
 		`;
