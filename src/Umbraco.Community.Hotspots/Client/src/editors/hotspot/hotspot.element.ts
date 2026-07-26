@@ -18,7 +18,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   @property({ attribute: false })
   set value(value) {
     if (!value) {
-      this.focalPoint = null;
+      this.focalPoint = this.hideHotspot ? null : { left: 0.5, top: 0.5 };
       this.src = '';
       this.mediaId = undefined;
       this.#value = undefined;
@@ -69,6 +69,11 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   async #setConfig() {
     if (this._config && this.#documentWorkspaceContext) {
       this.hideHotspot = this._config?.getValueByAlias<boolean>('hideHotspot') ?? false;
+
+      // Apply initial focal point only when there is no persisted value yet.
+      if (!this.#value) {
+        this.focalPoint = this.hideHotspot ? null : { left: 0.5, top: 0.5 };
+      }
 
       const source = this._config?.getValueByAlias<SourceImagePropertyEditorValue>('source');
       if (source) {
@@ -184,8 +189,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
   protected renderActions() {
     return html`
-      ${when(
-        !this.hideHotspot && this.focalPoint,
+      ${when(this.focalPoint != null,
         () => html`
           <uui-button compact label=${this.localize.term('hotspot_clearFocalPoint')} @click=${this.onClearFocalPoint}>
 					  <uui-icon name="icon-remove"></uui-icon>
@@ -193,8 +197,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 				  </uui-button>
 				`,
       )}
-			${when(
-      !this.hideHotspot && this.focalPoint && this.focalPoint.left !== 0.5 && this.focalPoint.top !== 0.5,
+			${when(this.focalPoint != null && this.focalPoint.left !== 0.5 && this.focalPoint.top !== 0.5,
       () => html`
 					<uui-button compact label=${this.localize.term('content_resetFocalPoint')} @click=${this.onResetFocalPoint}>
 						<uui-icon name="icon-axis-rotation"></uui-icon>
