@@ -8,7 +8,7 @@ namespace Umbraco.Community.Hotspots.Migrations
         public HotspotMigrationPlan()
             : base("Umbraco.Community.Hotspots")
         {
-            this.RunMigrations();
+            RunMigrations();
         }
 
         /// <inheritdoc />
@@ -16,8 +16,8 @@ namespace Umbraco.Community.Hotspots.Migrations
 
         private void RunMigrations()
         {
-            /*this.From(this.InitialState)
-                .To<UpdatePropertyEditorUiAlias>("2.0.0");*/
+            From(this.InitialState)
+                .To<UpdatePropertyEditorUiAlias>("2.0.0");
         }
     }
 }
