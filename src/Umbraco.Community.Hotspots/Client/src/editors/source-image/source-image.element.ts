@@ -257,7 +257,6 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
               </div>`,
           )}
         </div>
-        <pre>${JSON.stringify(this.value, null, 2)}</pre>
       </div>
      `;
   }
