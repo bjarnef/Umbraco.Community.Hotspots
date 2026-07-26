@@ -18,7 +18,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   @property({ attribute: false })
   set value(value) {
     if (!value) {
-      this.focalPoint = this.hideHotspot ? null : { left: 0.5, top: 0.5 };
+      this.focalPoint = null;
       this.src = '';
       this.mediaId = undefined;
       this.#value = undefined;
