@@ -9,14 +9,17 @@ import { UmbImagingRepository } from "@umbraco-cms/backoffice/imaging";
 import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
 import { UMB_SERVER_CONTEXT } from '@umbraco-cms/backoffice/server';
 import type { HotspotPropertyEditorValue, SourceImagePropertyEditorValue, SourceImageType } from '../types.js';
+import { UmbFormControlMixin } from "@umbraco-cms/backoffice/validation";
 
 @customElement("hotspot-property-editor-ui")
-export class HotspotPropertyEditorUiElement extends UmbLitElement implements UmbPropertyEditorUiElement {
+export class HotspotPropertyEditorUiElement
+  extends UmbFormControlMixin<HotspotPropertyEditorValue, typeof UmbLitElement, undefined>(UmbLitElement, undefined)
+  implements UmbPropertyEditorUiElement {
 
   @query('#focal-point') focalPointElement!: HTMLElement;
 
   @property({ attribute: false })
-  set value(value) {
+  public override set value(value) {
     if (!value) {
       this.focalPoint = null;
       this.src = '';
@@ -31,10 +34,13 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
     this.requestUpdate();
   }
-  get value() {
+  public override get value() {
     return this.#value;
   }
   #value?: HotspotPropertyEditorValue;
+
+  @property({ type: Boolean })
+  mandatory = false;
 
   @state()
   private _config?: UmbPropertyEditorConfigCollection;
@@ -140,6 +146,14 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     this.consumeContext(UMB_SERVER_CONTEXT, (context) => {
       this._serverUrl = context?.getServerUrl() ?? '';
     });
+  }
+
+  protected firstUpdated(): void {
+    this.addValidator(
+			'valueMissing',
+			() => 'Hotspot is required',
+			() => this.mandatory && !this.value?.focalPoint,
+		);
   }
 
   #onFocalPointChange = (event: UmbFocalPointChangeEvent) => {
