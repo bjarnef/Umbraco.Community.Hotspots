@@ -1,15 +1,9 @@
 import { customElement, html, css, property, query, state, when } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
-//import { UmbPropertyValueChangeEvent } from "@umbraco-cms/backoffice/property-editor";
 import { UmbFocalPointChangeEvent } from '@umbraco-cms/backoffice/media';
 import type { UmbImageCropperFocalPoint } from '@umbraco-cms/backoffice/media';
 import type { UmbPropertyEditorConfigCollection, UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/property-editor';
 import { UMB_DOCUMENT_WORKSPACE_CONTEXT, UmbDocumentWorkspaceContext } from "@umbraco-cms/backoffice/document";
-//import { UmbDocumentDetailRepository } from "@umbraco-cms/backoffice/document";
-//import { UmbDocumentItemRepository } from "@umbraco-cms/backoffice/document";
-//import { UmbMediaDetailRepository } from "@umbraco-cms/backoffice/media";
-//import { UmbEntityUnique } from "@umbraco-cms/backoffice/entity";
-//import { UmbElementDetailModel } from "@umbraco-cms/backoffice/content";
 import { ImageCropModeModel } from '@umbraco-cms/backoffice/external/backend-api';
 import { UmbImagingRepository } from "@umbraco-cms/backoffice/imaging";
 import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
@@ -18,11 +12,6 @@ import type { HotspotPropertyEditorValue, SourceImagePropertyEditorValue, Source
 
 @customElement("hotspot-property-editor-ui")
 export class HotspotPropertyEditorUiElement extends UmbLitElement implements UmbPropertyEditorUiElement {
-
-  /*static properties = {
-    value: { type: Object },
-    config: { type: Object },
-  }*/
 
   @query('#focal-point') focalPointElement!: HTMLElement;
 
@@ -75,9 +64,6 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   };
 
   #documentWorkspaceContext?: UmbDocumentWorkspaceContext;
-  //#documentDetailRepository = new UmbDocumentDetailRepository(this);
-  //#documentItemRepository = new UmbDocumentItemRepository(this);
-  //#mediaDetailRepository = new UmbMediaDetailRepository(this);
   #imagingRepository = new UmbImagingRepository(this);
 
   async #setConfig() {
@@ -85,8 +71,6 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
       this.hideHotspot = this._config?.getValueByAlias<boolean>('hideHotspot') ?? false;
 
       const source = this._config?.getValueByAlias<SourceImagePropertyEditorValue>('source');
-
-      console.log("source:", source);
       if (source) {
         this.type = source.type === "staticAsset" ? "staticAsset" : "media";
         this.src = source.src?.replace(/^~/, '') || undefined;
@@ -97,15 +81,7 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
   async #retrieveMedia() {
 
-    /*if (this.type === 'staticAsset') {
-      this.src.replace(/^~/, "");;
-
-      return;
-    }*/
-
     const mediaUnique = this.mediaId || null;
-
-    console.log("retrieveMedia", mediaUnique);
 
     if (!mediaUnique) {
       return;
@@ -120,8 +96,6 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
       mode: ImageCropModeModel.MAX,
     });
 
-    console.log("Media image data", data);
-
     if (!data || data.length === 0) return;
 
     this._imgSrc = data[0].url;
@@ -132,8 +106,6 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
     this.consumeContext(UMB_DOCUMENT_WORKSPACE_CONTEXT, (context) => {
       this.#documentWorkspaceContext = context;
       this.#setConfig();
-
-      console.log("Hotspot Property Editor UI - connectedCallback - type:", this.type, "src:", this.src, "mediaId:", this.mediaId);
 
       if (this.type === "media") {
         this.#retrieveMedia();
@@ -146,7 +118,6 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
   get source(): string {
     if (this.src) {
-      console.log("Hotspot Property Editor UI - source:", this.src);
       // Test that URL is relative:
       if (this.src.startsWith('/')) {
         return `${this._serverUrl}${this.src}`;
@@ -202,8 +173,6 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
 
   protected renderMain() {
     return html`
-    Value: ${JSON.stringify(this.value)}<br>
-    Hide Hotspot: ${this.hideHotspot}<br>
       <umb-image-cropper-focus-setter
 				.focalPoint=${this.focalPoint}
 				.src=${this._imgSrc ?? this.source}

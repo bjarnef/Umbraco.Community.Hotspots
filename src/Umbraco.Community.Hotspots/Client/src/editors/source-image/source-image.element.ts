@@ -4,15 +4,12 @@ import { UmbModalRouteRegistrationController } from '@umbraco-cms/backoffice/rou
 import type { UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/property-editor';
 import { UMB_WORKSPACE_MODAL } from '@umbraco-cms/backoffice/workspace';
 import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
-//import { UmbStaticFilePickerInputContext } from '@umbraco-cms/backoffice/static-file';
 import { isUmbracoFolder, UmbMediaTypeStructureRepository } from '@umbraco-cms/backoffice/media-type';
 import { UMB_MEDIA_TYPE_ENTITY_TYPE } from '@umbraco-cms/backoffice/media-type';
-//import { UmbMediaPickerInputContext } from '@umbraco-cms/backoffice/media';
 import type {  } from '@umbraco-cms/backoffice/media';
 import { UmbMediaDetailRepository } from '@umbraco-cms/backoffice/media';
 import type { UmbMediaCardItemModel } from '@umbraco-cms/backoffice/media';
 import type { SourceImagePropertyEditorValue, SourceImageType } from '../types.js';
-//import { UMB_PICKER_INPUT_CONTEXT } from '@umbraco-cms/backoffice/picker-input';
 import { UUIRadioElement } from '@umbraco-cms/backoffice/external/uui';
 import type { UUIRadioEvent } from '@umbraco-cms/backoffice/external/uui';
 import type { UmbMediaItemModel } from '@umbraco-cms/backoffice/media';
@@ -30,8 +27,6 @@ import { ImageCropModeModel } from "@umbraco-cms/backoffice/external/backend-api
 
 @customElement("source-image-property-editor-ui")
 export class SourceImagePropertyEditorUiElement extends UmbLitElement implements UmbPropertyEditorUiElement {
-  //@property()
-  //value?: string;
 
   @property({ attribute: false })
   set value(value) {
@@ -81,24 +76,12 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
   @state()
   private _allowedMediaTypeUniques?: Array<string>;
 
-  //#pickerFileInputContext = new UmbStaticFilePickerInputContext(this);
-  //#pickerInputContext = new UmbMediaPickerInputContext(this);
-
-  //#pickerInputContext?: typeof UMB_PICKER_INPUT_CONTEXT.TYPE;
   #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
-
-  //readonly #itemManager = new UmbRepositoryItemsManager<UmbMediaItemModel>(this, UMB_MEDIA_ITEM_REPOSITORY_ALIAS);
 
   readonly #mediaRepository = new UmbMediaDetailRepository(this);
 
   constructor() {
     super();
-
-    //this.observe(this.#itemManager.items, () => {
-    //  this.#populateCards();
-    //});
-
-    console.log("value", this.value);
 
     new UmbModalRouteRegistrationController(this, UMB_WORKSPACE_MODAL)
       .addAdditionalPath('media')
@@ -119,24 +102,6 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
     this.consumeContext(UMB_SERVER_CONTEXT, (context) => {
       this._serverUrl = context?.getServerUrl() ?? '';
     });
-
-    /*this.consumeContext(UMB_PICKER_INPUT_CONTEXT, (pickerInputContext) => {
-      this.#pickerInputContext = pickerInputContext;
-    });*/
-
-    /*this.observe(this.#pickerInputContext?.selection, (selection) => {
-      if (this.value && selection) {
-        this.mediaId = selection[0];
-        this.#updateValue();
-      }
-    });
-
-    this.observe((this.#pickerInputContext as UmbMediaPickerInputContext)?.selectedItems, async (selectedItems) => {
-      const missingCards = selectedItems.filter((item) => !this._cards.find((card) => card.unique === item.unique));
-      if (selectedItems?.length && !missingCards.length) return;
-
-      this._cards = selectedItems ?? [];
-    });*/
   }
 
   firstUpdated() {
@@ -152,16 +117,10 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
   }
 
   async #populateCards() {
-    /*const mediaItems = this.#itemManager.getItems();
-    const media = mediaItems.find((x) => x.unique === this.value?.mediaId);
-
-    this._cards =
-      media ? [media] : [];*/
 
     if (!this.mediaKey) return;
 
     const { data: image } = await this.#mediaRepository.requestByUnique(this.mediaKey)
-    console.log(image);
 
     const card: UmbMediaCardItemModel = {
       entityType: "media",
@@ -224,20 +183,6 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
         }
       })
       .catch(() => undefined);
-
-    /*this.#pickerInputContext.openPicker(
-      {
-        multiple: false,
-        //startNode: this.startNode,
-      },
-      {
-        allowedContentTypes: this._allowedMediaTypeUniques?.map((id) => ({
-          unique: id,
-          entityType: UMB_MEDIA_TYPE_ENTITY_TYPE,
-        })),
-        includeTrashed: false,
-      },
-    );*/
   }
 
   #pickableFilter = (
@@ -263,20 +208,11 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
     modalContext
       ?.onSubmit()
       .then((value) => {
-        /*this._cards = [...this._cards,
-          {
-            url: value.url,
-            preview: value.markup,
-            width: value.width,
-            height: value.height
-          }
-        ];*/
+
         if (value.selection && value.selection.length > 0) {
 
           let path = value.selection[0];
           if (!path) return;
-
-          console.log("path", path);
 
           const decodedPath = decodeURIComponent(path).replace(/%dot%/g, ".");
           const normalizedPath = decodedPath
@@ -285,25 +221,15 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
             
           const src = `~${normalizedPath.startsWith("/") ? normalizedPath : `/${normalizedPath}`}`;
 
-          console.log("SRC", src);
-
           this.mediaKey = undefined;
           this.src = src;
           this.#updateValue();
         }
       })
       .catch(() => undefined);
-    /*(this.#pickerInputContext as UmbStaticFilePickerInputContext)?.openPicker(
-      {
-        pickableFilter: (item) => !item.isFolder,
-        multiple: false,
-        hideTreeRoot: true
-      }
-    */
   }
 
   async #onRemoveMedia(item: UmbMediaCardItemModel) {
-    //await this.#pickerInputContext?.requestRemoveItem(item.unique);
     this._cards = this._cards.filter((x) => x.unique !== item.unique);
     this.mediaKey = undefined;
     this.src = undefined;
