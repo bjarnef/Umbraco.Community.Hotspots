@@ -16,7 +16,7 @@ namespace Umbraco.Community.Hotspots.Migrations
 
         private void RunMigrations()
         {
-            From(this.InitialState)
+            From(InitialState)
                 .To<UpdatePropertyEditorUiAlias>("2.0.0");
         }
     }

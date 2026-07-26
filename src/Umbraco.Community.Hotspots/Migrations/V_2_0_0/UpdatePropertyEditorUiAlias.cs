@@ -3,12 +3,8 @@ using Umbraco.Cms.Infrastructure.Persistence.Dtos;
 
 namespace Umbraco.Community.Hotspots.Migrations.V_2_0_0
 {
-    internal sealed class UpdatePropertyEditorUiAlias : AsyncMigrationBase
+    internal sealed class UpdatePropertyEditorUiAlias(IMigrationContext context) : AsyncMigrationBase(context)
     {
-        public UpdatePropertyEditorUiAlias(IMigrationContext context) : base(context)
-        {
-        }
-
         protected override async Task MigrateAsync()
         {
             var dataTypes = await Database.Query<DataTypeDto>()
