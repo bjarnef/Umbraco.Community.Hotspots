@@ -12,7 +12,7 @@ const localizations: Array<ManifestLocalization> = [
   },
   {
     type: "localization",
-    alias: "Umbraco.Community.Hotspots.Localization.DaDK",
+    alias: "Umbraco.Community.Hotspots.Localization.DaDk",
     name: "Hotspot Danish (Denmark) Localization",
     meta: {
       culture: "da-dk"
