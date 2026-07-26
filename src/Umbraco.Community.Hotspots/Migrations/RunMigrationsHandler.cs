@@ -24,6 +24,6 @@ internal sealed class RunMigrationsHandler(
 
         var upgrader = new Upgrader(new HotspotMigrationPlan());
 
-        //await upgrader.ExecuteAsync(migrationPlanExecutor, coreScopeProvider, keyValueService);
+        await upgrader.ExecuteAsync(migrationPlanExecutor, coreScopeProvider, keyValueService);
     }
 }
