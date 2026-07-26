@@ -187,9 +187,9 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
       ${when(
         !this.hideHotspot && this.focalPoint,
         () => html`
-          <uui-button compact label=${this.localize.term('content_clearFocalPoint')} @click=${this.onClearFocalPoint}>
+          <uui-button compact label=${this.localize.term('hotspot_clearFocalPoint')} @click=${this.onClearFocalPoint}>
 					  <uui-icon name="icon-remove"></uui-icon>
-					  <umb-localize key="content_clearFocalPoint">Clear focal point</umb-localize>
+					  <umb-localize key="hotspot_clearFocalPoint">Clear focal point</umb-localize>
 				  </uui-button>
 				`,
       )}

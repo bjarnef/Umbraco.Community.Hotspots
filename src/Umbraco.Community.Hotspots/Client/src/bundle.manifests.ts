@@ -1,7 +1,9 @@
 import { manifests as editors } from "./editors/manifests.js";
+import { manifests as localizations } from "./localization/manifests.js";
 
 // Job of the bundle is to collate all the manifests from different parts of the extension and load other manifests
 // We load this bundle from umbraco-package.json
 export const manifests: Array<UmbExtensionManifest> = [
   ...editors,
+  ...localizations,
 ];
