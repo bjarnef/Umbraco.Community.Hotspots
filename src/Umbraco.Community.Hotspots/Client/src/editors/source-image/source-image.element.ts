@@ -287,24 +287,6 @@ export class SourceImagePropertyEditorUiElement extends UmbLitElement implements
 
           console.log("SRC", src);
 
-          const card: UmbMediaCardItemModel = {
-            entityType: "media",
-            unique: "",
-            src: src,
-            name: "Test",
-            isTrashed: false,
-            hasChildren: false,
-            parent: null,
-            variants: [],
-            mediaType: {
-              unique: "",
-              icon: "icon-document",
-              collection: null
-            }
-          };
-
-          this._cards = [...this._cards, card];
-
           this.mediaKey = undefined;
           this.src = src;
           this.#updateValue();
