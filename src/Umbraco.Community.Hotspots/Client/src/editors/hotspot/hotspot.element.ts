@@ -29,12 +29,12 @@ export class HotspotPropertyEditorUiElement extends UmbLitElement implements Umb
   @property({ attribute: false })
   set value(value) {
     if (!value) {
-      this.focalPoint = { left: 0.5, top: 0.5 };
+      this.focalPoint = null;
       this.src = '';
       this.mediaId = undefined;
       this.#value = undefined;
     } else {
-      this.focalPoint = value.focalPoint || { left: 0.5, top: 0.5 };
+      this.focalPoint = value.focalPoint || null;
       this.src = value.src || undefined;
       this.mediaId = value.mediaId || undefined;
       this.#value = value;
