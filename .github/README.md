@@ -23,6 +23,11 @@ Hotspot editor for Umbraco.
 > 
 > To understand more about which Umbraco CMS versions are actively supported by Umbraco HQ, please see [Umbraco's Long-term Support (LTS) and End-of-Life (EOL) policy](https://umbraco.com/products/knowledge-center/long-term-support-and-end-of-life/).
 
+> [!NOTE]
+> Although the focal point has been cleared, it is still displayed due to a bug in the CMS. This issue is expected to be fixed in Umbraco 18.2.0.
+
+> When the focal point is cleared, its value is stored as `null`. Using reset button instead sets the focal point to the center coordinates.
+
 This package is [available via NuGet](https://www.nuget.org/packages/Umbraco.Community.Hotspots).
 
 To install the package, you can use either the .NET CLI:
