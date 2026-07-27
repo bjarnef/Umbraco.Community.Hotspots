@@ -18,7 +18,7 @@ Hotspot editor for Umbraco.
 ## Installation
 
 > [!IMPORTANT]
-> **v1.x** supports Umbraco v13.x
+> **v1.x** supports Umbraco v13.x  
 > **v2.x** supports Umbraco v18.x
 > 
 > To understand more about which Umbraco CMS versions are actively supported by Umbraco HQ, please see [Umbraco's Long-term Support (LTS) and End-of-Life (EOL) policy](https://umbraco.com/products/knowledge-center/long-term-support-and-end-of-life/).
