@@ -25,7 +25,7 @@ Hotspot editor for Umbraco.
 
 > [!NOTE]
 > Although the focal point has been cleared, it is still displayed due to a bug in the CMS. This issue is expected to be fixed in Umbraco 18.2.0.
-
+>
 > When the focal point is cleared, its value is stored as `null`. Using reset button instead sets the focal point to the center coordinates.
 
 This package is [available via NuGet](https://www.nuget.org/packages/Umbraco.Community.Hotspots).
