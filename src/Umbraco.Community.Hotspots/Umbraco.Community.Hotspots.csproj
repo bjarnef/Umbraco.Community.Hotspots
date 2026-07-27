@@ -7,7 +7,6 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <ContentTargetFolders>.</ContentTargetFolders>
 	<PackageId>Umbraco.Community.Hotspots</PackageId>
     <Product>Umbraco.Community.Hotspots</Product>
     <Title>Umbraco Community Hotspots</Title>
