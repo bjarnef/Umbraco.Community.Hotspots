@@ -5,6 +5,5 @@
     <File Path="../LICENSE" />
     <File Path="../umbraco-marketplace.json" />
   </Folder>
-  <Project Path="Umbraco.Community.Hotspots.TestSite/Umbraco.Community.Hotspots.TestSite.csproj" />
   <Project Path="Umbraco.Community.Hotspots/Umbraco.Community.Hotspots.csproj" />
 </Solution>
